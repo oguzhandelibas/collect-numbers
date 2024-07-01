@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CollectNumbers
 {
-    public class MatchController
+    public class MatchController : AbstractSingleton<MatchController>
     {
         public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y)
         {
@@ -35,10 +35,46 @@ namespace CollectNumbers
             {
                 Debug.Log("Aynı satırda 3 ve fazlası oldu");
                 rowElements.Add(currentElement); // Mevcut elemanı da ekle
+                List<int> eslesenler = new List<int>();
+                List<int> inecekler = new List<int>();
                 foreach (var behaviour in rowElements)
                 {
                     behaviour.gameObject.SetActive(false);
+                    behaviour.transform.position += Vector3.up * 5;
+                    // her bir eşleşen elemanın gridElements içindeki pozisyonunu değişeceğiz
+                    // bu değişim eşleşen elemanla sınırlı kalmayacak, üstündekiler de aşağıya kaymak zorunda.
+                    // tüm değişim işlemleri yapıldıktan sonra yapılacak şey; GridManager içindeki pozisyon bilgilerine göre elemanları yeniden konumlandırmak.
+                    eslesenler.Add(behaviour.index);
+                    Debug.Log(behaviour.index);
+                    Debug.Log("Satır: " + y);
+                    for (int i = y; i > 0; i--)
+                    {
+                        Debug.Log($"Indexler:   {(behaviour.index) - (i * gridSize.y)}");
+                        inecekler.Add((behaviour.index) - (i * gridSize.y));
+                    }
                 }
+
+                NumberBehaviour[] eslesen = new NumberBehaviour[eslesenler.Count];
+                for (int i = 0; i < eslesenler.Count; i++)
+                {
+                    eslesen[i] = gridElements[eslesenler[i]];
+                }
+                
+                for (int i = inecekler.Count-1; i >= 0 ; i--)
+                {
+                    //int index = gridElements[inecekler[i] + gridSize.y].index;
+                    gridElements[inecekler[i] + gridSize.y] = gridElements[inecekler[i]];
+                    //gridElements[inecekler[i] + gridSize.y].index = index;
+                }
+
+                for (int i = 0; i < eslesenler.Count; i++)
+                {
+                    //int index = gridElements[eslesenler[i] - y * gridSize.y].index;
+                    gridElements[eslesenler[i] - y * gridSize.y] = eslesen[i];
+                    //gridElements[eslesenler[i] - y * gridSize.y].index = index;
+                }
+                
+                GridManager.Instance.SetPositions();
             }
 
             // Sütun elemanlarını kontrol et (y koordinatında yukarı ve aşağı doğru)
@@ -57,18 +93,19 @@ namespace CollectNumbers
                 }
             }
 
-            if (columnElements.Count >= 2)
+            if (columnElements.Count > 2)
             {
                 Debug.Log("Aynı sütunda 3 ve fazlası oldu");
                 columnElements.Add(currentElement); // Mevcut elemanı da ekle
                 foreach (var behaviour in columnElements)
                 {
                     behaviour.gameObject.SetActive(false);
+                    behaviour.transform.position += Vector3.up * 5;
                 }
             }
         }
 
-        
+
         public void InitialMatchCheck(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y)
         {
             // AYNI ELEMANLARIN SAYISINI KONTROL EDECEĞİZ
@@ -131,11 +168,13 @@ namespace CollectNumbers
                 newNumber = elementGenerator.GetRandomEnumValue<SelectedNumber>();
             } while (IsDuplicateInRowOrColumn(gridElements, element, newNumber, gridSize));
 
-            element.Initialize(elementGenerator.GetRandomElementContext(newNumber), elementGenerator.GetColor(newNumber),
+            element.Initialize(elementGenerator.GetRandomElementContext(newNumber),
+                elementGenerator.GetColor(newNumber),
                 newNumber);
         }
 
-        private bool IsDuplicateInRowOrColumn(NumberBehaviour[] gridElements, NumberBehaviour element, SelectedNumber newNumber,
+        private bool IsDuplicateInRowOrColumn(NumberBehaviour[] gridElements, NumberBehaviour element,
+            SelectedNumber newNumber,
             Vector2Int gridSize)
         {
             int index = Array.IndexOf(gridElements, element);

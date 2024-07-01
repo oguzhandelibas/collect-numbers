@@ -7,6 +7,7 @@ namespace CollectNumbers
 {
     public class NumberBehaviour : MonoBehaviour, IPointerDownHandler
     {
+        public int index;
         public SelectedNumber selectedNumber;
         [SerializeField] private TextMeshProUGUI numberText;
         [SerializeField] private Image numberImage;
