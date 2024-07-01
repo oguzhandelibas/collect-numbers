@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using CarLotJam.UIModule;
+using CollectNumbers.UIModule;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -173,7 +173,7 @@ namespace ODProjects.UICreator.Scripts.Editor
             }
 
             go.name = "UIManager";
-            go.transform.SetParent(GameObject.Find("---> MANAGER").transform);
+            //go.transform.SetParent(GameObject.Find("---> MANAGER").transform);
 
             // Instantiate UI prefabs
             for (int i = 0; i < _contents.Count; i++)

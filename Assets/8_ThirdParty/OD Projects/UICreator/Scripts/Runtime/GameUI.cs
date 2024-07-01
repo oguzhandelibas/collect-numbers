@@ -1,11 +1,11 @@
-﻿using CarLotJam.GameManagementModule;
-using CarLotJam.LevelModule;
+﻿using CollectNumbers.GameManagementModule;
+using CollectNumbers.LevelModule;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace CarLotJam.UIModule
+namespace CollectNumbers.UIModule
 {
     public class GameUI : View
     {
@@ -16,7 +16,7 @@ namespace CarLotJam.UIModule
 
         public void SetLevelCountText()
         {
-            levelCountText.text = "Level " + (_gameManager.GetLevelIndex() + 1);
+            //levelCountText.text = "Level " + (_gameManager.GetLevelIndex() + 1);
         }
 
         #region SUBSCRIBE EVENTS

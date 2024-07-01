@@ -1,17 +1,16 @@
 ﻿using System;
-using CarLotJam.GameManagementModule;
-using CarLotJam.LevelModule;
+using CollectNumbers.GameManagementModule;
+using CollectNumbers.LevelModule;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace CarLotJam.UIModule
+namespace CollectNumbers.UIModule
 {
     public class UnlockUI : View
     {
-        [SerializeField] private CoinController _coinController;
         [SerializeField] private RectTransform shineHolder;
         [SerializeField] private Image itemBackgroundIcon;
         [SerializeField] private Image itemIcon;
@@ -35,7 +34,6 @@ namespace CarLotJam.UIModule
             continueButton.SetActive(false);
             itemIcon.gameObject.SetActive(false);
             willGenerateCoinCount.text = 30.ToString();
-            _coinController.CreateCoins(30);
         }
 
         public void UnlockShine()

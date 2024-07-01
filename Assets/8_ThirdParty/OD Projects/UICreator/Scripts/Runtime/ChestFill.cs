@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CarLotJam.UIModule
+namespace CollectNumbers.UIModule
 {
     public class ChestFill : MonoBehaviour
     {

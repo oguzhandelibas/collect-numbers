@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CarLotJam.UIModule
+namespace CollectNumbers.UIModule
 {
     public class UIManager : AbstractSingleton<UIManager>
     {

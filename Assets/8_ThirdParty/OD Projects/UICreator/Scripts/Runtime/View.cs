@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CarLotJam.UIModule
+namespace CollectNumbers.UIModule
 {
     public abstract class View : MonoBehaviour
     {
