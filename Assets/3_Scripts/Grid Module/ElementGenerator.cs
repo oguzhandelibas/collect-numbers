@@ -69,7 +69,6 @@ namespace CollectNumbers
         public NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour)
         {
             SelectedNumber selectedNumber = GetRandomEnumValue<SelectedNumber>();
-            SelectedColor selectedColor = GetRandomEnumValue<SelectedColor>();
             numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber);
             return numberBehaviour;
         }

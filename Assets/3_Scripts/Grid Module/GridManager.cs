@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace CollectNumbers
 {
@@ -16,7 +14,6 @@ namespace CollectNumbers
         {
             CreateGrid(levelData.gridSize, levelData.Elements);
         }
-        
         
         public void CreateGrid(Vector2Int gridSize, Element[] elements)
         {
@@ -39,7 +36,6 @@ namespace CollectNumbers
             // Instantiate cells
             CreateCells(gridSize, cellScale, parentRect, offsetX, elements);
         }
-
         private void CreateCells(Vector2Int gridSize, float cellScale, RectTransform parentRect, float offsetX, Element[] elements)
         {
             ElementGenerator elementGenerator = new ElementGenerator();
@@ -61,7 +57,7 @@ namespace CollectNumbers
                     {
                         cell = elementGenerator.GenerateRandomElement(cell);
                         _gridElements[y * gridSize.x + x] = cell;
-                        matchController.CheckMatches(_gridElements, gridSize, x, y);
+                        matchController.InitialMatchCheck(_gridElements, gridSize, x, y);
                     }
                     else // Set Identified Element
                     {
@@ -71,10 +67,30 @@ namespace CollectNumbers
                 }
             }
         }
-        
+
+        private void ChangeGridElement(NumberBehaviour numberBehaviour)
+        {
+            ElementGenerator elementGenerator = new ElementGenerator();
+            elementGenerator.GenerateRandomElement(numberBehaviour);
+            Vector2Int gridSize = levelData.gridSize;
+            int index = Array.IndexOf(_gridElements, numberBehaviour);
+            int row = index / gridSize.y;
+            int col = index % gridSize.y;
+            new MatchController().CheckMatch(_gridElements, gridSize, col, row);
+        }
+
+        #region EVENT SUBSCRIPTION
+
+        private void OnEnable()
+        {
+            SO_Manager.Load_SO<GridSignals>().OnGridElementChanged += ChangeGridElement;
+        }
+
+        private void OnDisable()
+        {
+            SO_Manager.Load_SO<GridSignals>().OnGridElementChanged -= ChangeGridElement;
+        }
+
+        #endregion
     }
 }
-// Eleman için tek ve sağlam bir class olsun
-// Random ve istenen eleman oluşturma tek bir kaynaktan olsun
-// Match kontrolü için ayrı bir modül oluşturulmalı
-// Match kontrolü istenen fonksiyonda verilen bilgiler doğrultusunda dikey ve yatay kontrol yapmalı

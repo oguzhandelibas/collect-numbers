@@ -7,7 +7,7 @@ namespace CollectNumbers
 {
     public class MatchController
     {
-        public void CheckMatches(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y)
+        public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y)
         {
             // AYNI ELEMANLARIN SAYISINI KONTROL EDECEĞİZ
             List<NumberBehaviour> rowElements = new List<NumberBehaviour>();
@@ -15,37 +15,107 @@ namespace CollectNumbers
 
             NumberBehaviour currentElement = gridElements[y * gridSize.x + x];
 
-            // Satır elemanlarını kontrol et
-            for (int i = 0; i < gridSize.x; i++)
+            // Satır elemanlarını kontrol et (x koordinatında sağa ve sola doğru)
+            for (int i = -2; i <= 2; i++)
             {
-                NumberBehaviour rowElement = gridElements[y * gridSize.x + i];
-                if (rowElement == null) continue;
+                if (i == 0) continue; // Mevcut elemanı atla
 
-                if (rowElement.selectedNumber == currentElement.selectedNumber)
+                int checkX = x + i;
+                if (checkX >= 0 && checkX < gridSize.x)
                 {
-                    rowElements.Add(rowElement);
+                    NumberBehaviour rowElement = gridElements[y * gridSize.x + checkX];
+                    if (rowElement != null && rowElement.selectedNumber == currentElement.selectedNumber)
+                    {
+                        rowElements.Add(rowElement);
+                    }
                 }
             }
 
-            if (rowElements.Count > 2)
+            if (rowElements.Count >= 2)
+            {
+                Debug.Log("Aynı satırda 3 ve fazlası oldu");
+                rowElements.Add(currentElement); // Mevcut elemanı da ekle
+                foreach (var behaviour in rowElements)
+                {
+                    behaviour.gameObject.SetActive(false);
+                }
+            }
+
+            // Sütun elemanlarını kontrol et (y koordinatında yukarı ve aşağı doğru)
+            for (int i = -2; i <= 2; i++)
+            {
+                if (i == 0) continue; // Mevcut elemanı atla
+
+                int checkY = y + i;
+                if (checkY >= 0 && checkY < gridSize.y)
+                {
+                    NumberBehaviour columnElement = gridElements[checkY * gridSize.x + x];
+                    if (columnElement != null && columnElement.selectedNumber == currentElement.selectedNumber)
+                    {
+                        columnElements.Add(columnElement);
+                    }
+                }
+            }
+
+            if (columnElements.Count >= 2)
+            {
+                Debug.Log("Aynı sütunda 3 ve fazlası oldu");
+                columnElements.Add(currentElement); // Mevcut elemanı da ekle
+                foreach (var behaviour in columnElements)
+                {
+                    behaviour.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        
+        public void InitialMatchCheck(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y)
+        {
+            // AYNI ELEMANLARIN SAYISINI KONTROL EDECEĞİZ
+            List<NumberBehaviour> rowElements = new List<NumberBehaviour>();
+            List<NumberBehaviour> columnElements = new List<NumberBehaviour>();
+
+            NumberBehaviour currentElement = gridElements[y * gridSize.x + x];
+
+            // Satır elemanlarını kontrol et (x koordinatında sağa ve sola doğru)
+            for (int i = -2; i <= 2; i++)
+            {
+                if (i == 0) continue; // Mevcut elemanı atla
+
+                int checkX = x + i;
+                if (checkX >= 0 && checkX < gridSize.x)
+                {
+                    NumberBehaviour rowElement = gridElements[y * gridSize.x + checkX];
+                    if (rowElement != null && rowElement.selectedNumber == currentElement.selectedNumber)
+                    {
+                        rowElements.Add(rowElement);
+                    }
+                }
+            }
+
+            if (rowElements.Count >= 2)
             {
                 Debug.Log("Aynı satırda 3 ve fazlası var");
                 RegenerateElement(gridElements, currentElement, gridSize);
             }
 
-            // Sütun elemanlarını kontrol et
-            for (int i = 0; i < gridSize.y; i++)
+            // Sütun elemanlarını kontrol et (y koordinatında yukarı ve aşağı doğru)
+            for (int i = -2; i <= 2; i++)
             {
-                NumberBehaviour columnElement = gridElements[i * gridSize.x + x];
-                if (columnElement == null) continue;
+                if (i == 0) continue; // Mevcut elemanı atla
 
-                if (columnElement.selectedNumber == currentElement.selectedNumber)
+                int checkY = y + i;
+                if (checkY >= 0 && checkY < gridSize.y)
                 {
-                    columnElements.Add(columnElement);
+                    NumberBehaviour columnElement = gridElements[checkY * gridSize.x + x];
+                    if (columnElement != null && columnElement.selectedNumber == currentElement.selectedNumber)
+                    {
+                        columnElements.Add(columnElement);
+                    }
                 }
             }
 
-            if (columnElements.Count > 2)
+            if (columnElements.Count >= 2)
             {
                 Debug.Log("Aynı sütunda 3 ve fazlası var");
                 RegenerateElement(gridElements, currentElement, gridSize);

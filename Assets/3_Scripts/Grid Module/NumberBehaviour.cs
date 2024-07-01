@@ -1,8 +1,6 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace CollectNumbers
@@ -22,12 +20,7 @@ namespace CollectNumbers
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            Debug.Log("Selam");
-        }
-
-        private void OnMouseDown()
-        {
-            Debug.Log("naber");
+            SO_Manager.Load_SO<GridSignals>().OnGridElementChanged?.Invoke(this);
         }
     }
 }

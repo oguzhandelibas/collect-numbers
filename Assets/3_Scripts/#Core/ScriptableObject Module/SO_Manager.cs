@@ -5,14 +5,16 @@ using UnityEngine;
 
 public enum SO_Type
 {
-    ColorData
+    ColorData,
+    GridSignals
 }
 
 public static class SO_Manager
 {
     private static readonly Dictionary<SO_Type, string> Paths = new Dictionary<SO_Type, string>
     {
-        { SO_Type.ColorData, "ColorData"}
+        { SO_Type.ColorData, "ColorData"},
+        { SO_Type.GridSignals, "Signals/SD_GridSignals"}
     };
 
     private static readonly Dictionary<SO_Type, ScriptableObject> _cache = new Dictionary<SO_Type, ScriptableObject>();
@@ -55,6 +57,8 @@ public static class SO_Manager
     {
         if (typeof(T) == typeof(ColorData))
             return SO_Type.ColorData;
+        if (typeof(T) == typeof(GridSignals))
+            return SO_Type.GridSignals;
         
         throw new ArgumentException($"Unsupported ScriptableObject type: {typeof(T)}");
     }
