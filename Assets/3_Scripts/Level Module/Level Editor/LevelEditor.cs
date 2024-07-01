@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.IO;
 using CollectNumbers;
@@ -20,7 +21,7 @@ namespace ODProjects.LevelEditor
 
         #region ENUMS
 
-        private SelectedElement _selectedElement;
+        private SelectedNumber _selectedNumber;
         private SelectedColor _selectedColor;
 
         #endregion
@@ -200,18 +201,31 @@ namespace ODProjects.LevelEditor
             EditorGUILayout.Space(50);
             
             EditorGUILayout.BeginVertical("box", GUILayout.Width(300));
-            _selectedElement = (SelectedElement)EditorGUILayout.EnumPopup("Selected Element", _selectedElement);
-            _selectedColor = (SelectedColor)EditorGUILayout.EnumPopup("Selected Color", _selectedColor);
-
-            /* 
-            if ((_selectedElement != SelectedElement.BO_BarrierObstacle ||
-                 _selectedElement != SelectedElement.TC_TrafficConeObsctacle) &&
-                _selectedColor == SelectedColor.Gray) _selectedColor = SelectedColor.Red;
-
-            if (_selectedElement == SelectedElement.Null) _selectedColor = SelectedColor.Null;
-            else if (_selectedElement == SelectedElement.BO_BarrierObstacle ||
-                     _selectedElement == SelectedElement.TC_TrafficConeObsctacle) _selectedColor = SelectedColor.Gray;
-*/
+            _selectedNumber = (SelectedNumber)EditorGUILayout.EnumPopup("Selected Element", _selectedNumber);
+            //_selectedColor = (SelectedColor)EditorGUILayout.EnumPopup("Selected Color", _selectedColor);
+            switch (_selectedNumber)
+            {
+                case SelectedNumber.Null:
+                    _selectedColor = SelectedColor.Null;
+                    break;
+                case SelectedNumber.One:
+                    _selectedColor = SelectedColor.Red;
+                    break;
+                case SelectedNumber.Two:
+                    _selectedColor = SelectedColor.Green;
+                    break;
+                case SelectedNumber.Three:
+                    _selectedColor = SelectedColor.Blue;
+                    break;
+                case SelectedNumber.Four:
+                    _selectedColor = SelectedColor.Orange;
+                    break;
+                case SelectedNumber.Five:
+                    _selectedColor = SelectedColor.Purple;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             
             EditorGUILayout.Space();
 
@@ -329,14 +343,14 @@ namespace ODProjects.LevelEditor
             if (GUI.Button(GUILayoutUtility.GetRect(_boxSize, _boxSize), content, GUI.skin.button))
             {
                 bool hasNeighbour = true;
-                if (_selectedColor == SelectedColor.Null || _selectedElement == SelectedElement.Null) // ERASE
+                if (_selectedColor == SelectedColor.Null || _selectedNumber == SelectedNumber.Null) // ERASE
                 {
                     content.text = "N/A";
-                    _currentLevelData.SetButtonColor(index, SelectedColor.Null, _colorData.Colors[SelectedColor.Null].color, content, SelectedElement.Null);
+                    _currentLevelData.SetButtonColor(index, SelectedColor.Null, _colorData.Colors[SelectedColor.Null].color, content, SelectedNumber.Null);
                 }
 
                 if (!hasNeighbour) return;
-                else if(_selectedColor != SelectedColor.Null && _selectedElement != SelectedElement.Null)  // ADD
+                else if(_selectedColor != SelectedColor.Null && _selectedNumber != SelectedNumber.Null)  // ADD
                 {
                     ChangeButtonState(content, index);
                     //content.image = _elementData.Elements[_selectedElement];
@@ -352,12 +366,12 @@ namespace ODProjects.LevelEditor
             
             if (indexes.Count > 0)
             {
-                _currentLevelData.SetButtonColor(index, _selectedColor, _colorData.Colors[_selectedColor].color, content, _selectedElement);
+                _currentLevelData.SetButtonColor(index, _selectedColor, _colorData.Colors[_selectedColor].color, content, _selectedNumber);
                 /*for (int i = 1; i < indexes.Count; i++)
                 {
                     _currentLevelData.SetFakeButtonColor(indexes[i], _selectedColor, _colorData.Colors[_selectedColor].color, content, _selectedElement);
                 }*/
-                string temp1 = _selectedElement.ToString();
+                string temp1 = _selectedNumber.ToString();
                 content.text = temp1;
             }
         }

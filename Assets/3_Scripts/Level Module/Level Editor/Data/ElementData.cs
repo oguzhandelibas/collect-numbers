@@ -7,6 +7,6 @@ namespace CollectNumbers
     public class ElementData : ScriptableObject
     {
         [SerializedDictionary("Element Type", "Texture")]
-        public SerializedDictionary<SelectedElement, GameObject> Elements;
+        public SerializedDictionary<SelectedNumber, GameObject> Elements;
     }
 }

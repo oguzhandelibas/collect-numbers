@@ -17,9 +17,9 @@ namespace CollectNumbers
         #region GET LEVEL DATA
         public SelectedColor GetSelectedColor(int index) => Elements[index].SelectedColor;
 
-        public SelectedElement GetSelectedElement(int index)
+        public SelectedNumber GetSelectedElement(int index)
         {
-            return Elements[index].hasElement ? Elements[index].SelectedElement : SelectedElement.Null;
+            return Elements[index].hasElement ? Elements[index].selectedNumber : SelectedNumber.Null;
         }
 
         #endregion
@@ -32,22 +32,22 @@ namespace CollectNumbers
             ClearPath();
         }
         public int ArrayLength() => Elements.Length;
-        public bool ElementIsAvailable(int index) => Elements[index].SelectedElement == SelectedElement.Null;
-        public void SetButtonColor(int index, SelectedColor selectedColor, Color color, GUIContent guiContent, SelectedElement selectedElement)
+        public bool ElementIsAvailable(int index) => Elements[index].selectedNumber == SelectedNumber.Null;
+        public void SetButtonColor(int index, SelectedColor selectedColor, Color color, GUIContent guiContent, SelectedNumber selectedNumber)
         {
             if (!HasPath) HasPath = true;
             Elements[index].Color = color;
             Elements[index].SelectedColor = selectedColor;
-            Elements[index].SelectedElement = selectedElement;
+            Elements[index].selectedNumber = selectedNumber;
             Elements[index].GuiContent = guiContent;
             Elements[index].hasElement = true;
         }
-        public void SetFakeButtonColor(int index, SelectedColor selectedColor, Color color, GUIContent guiContent, SelectedElement selectedElement)
+        public void SetFakeButtonColor(int index, SelectedColor selectedColor, Color color, GUIContent guiContent, SelectedNumber selectedNumber)
         {
             if (!HasPath) HasPath = true;
             Elements[index].Color = color;
             Elements[index].SelectedColor = selectedColor;
-            Elements[index].SelectedElement = selectedElement;
+            Elements[index].selectedNumber = selectedNumber;
             Elements[index].GuiContent = guiContent;
             Elements[index].hasElement = false;
         }
@@ -63,7 +63,7 @@ namespace CollectNumbers
             {
                 Elements[i].Color = Color.white;
                 Elements[i].GuiContent = new GUIContent("N/A");
-                Elements[i].SelectedElement = SelectedElement.Null;
+                Elements[i].selectedNumber = SelectedNumber.Null;
             }
 
             HasPath = false;

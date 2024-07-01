@@ -1,6 +1,6 @@
 namespace CollectNumbers
 {
-    public enum SelectedElement
+    public enum SelectedNumber
     {
         Null,
         One,
