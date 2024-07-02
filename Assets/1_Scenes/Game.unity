@@ -1413,6 +1413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d1d6181a222424e96bd7a065121d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveCountText: {fileID: 4677914973653513040}
   levelData: {fileID: 11400000, guid: 569530a4ef91849be969f02aad01c975, type: 2}
   numberBehaviourPrefab: {fileID: -1800810667772710301, guid: 6c3a7a04d916848e7a4c2cf0112c8998, type: 3}
   gridParent: {fileID: 5926676844573181865}

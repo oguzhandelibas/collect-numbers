@@ -11,26 +11,8 @@ namespace CollectNumbers
 
         public Color GetColor()
         {
-            Color color = Color.white;
-            switch (TargetColor)
-            {
-                case SelectedColor.Red:
-                    color = Color.red;
-                    break;
-                case SelectedColor.Green:
-                    color = Color.green;
-                    break;
-                case SelectedColor.Blue:
-                    color = Color.blue;
-                    break;
-                case SelectedColor.Orange:
-                    color = Color.yellow;
-                    break;
-                case SelectedColor.Purple:
-                    color = Color.magenta;
-                    break;
-            }
-            return color;
+            ColorData colorData = SO_Manager.Load_SO<ColorData>();
+            return colorData.Colors[TargetColor].color;
         }
     }
 }

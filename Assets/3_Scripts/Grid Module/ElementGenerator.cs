@@ -69,6 +69,10 @@ namespace CollectNumbers
         public NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour)
         {
             SelectedNumber selectedNumber = GetRandomEnumValue<SelectedNumber>();
+            while (selectedNumber == numberBehaviour.selectedNumber)
+            {
+                selectedNumber = GetRandomEnumValue<SelectedNumber>();
+            }
             numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber);
             return numberBehaviour;
         }
