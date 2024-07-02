@@ -66,14 +66,14 @@ namespace CollectNumbers
             return element;
         }
 
-        public NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour)
+        public NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour, int movementRight)
         {
             SelectedNumber selectedNumber = GetRandomEnumValue<SelectedNumber>();
             while (selectedNumber == numberBehaviour.selectedNumber)
             {
                 selectedNumber = GetRandomEnumValue<SelectedNumber>();
             }
-            numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber);
+            numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber, movementRight);
             return numberBehaviour;
         }
     }

@@ -30,7 +30,6 @@ namespace ODProjects.LevelEditor
         
         private int _targetCountTemp=0;
         private bool _targetColorsInitialized;
-        private int _targetCount;
         private int _boxSize = 25;
         private bool _hasInitialize;
         private string[] _levelDataNames;
@@ -165,12 +164,14 @@ namespace ODProjects.LevelEditor
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(300));
             _currentLevelData.moveCount = EditorGUILayout.IntField("Move Count", _currentLevelData.moveCount);
+            _currentLevelData.movementRight = EditorGUILayout.IntField("Movement Right", _currentLevelData.movementRight);
             
-            _targetCount = EditorGUILayout.IntField("Goal Colors Count", _targetCount);
-            if (_targetCount != _targetCountTemp)
+            _currentLevelData.goalColorCount = EditorGUILayout.IntField("Goal Colors Count", _currentLevelData.goalColorCount);
+            
+            if (_currentLevelData.goalColorCount != _targetCountTemp)
             {
                 _currentLevelData.Goals.Clear();
-                for (int i = 0; i < _targetCount; i++)
+                for (int i = 0; i < _currentLevelData.goalColorCount; i++)
                 {
                     _currentLevelData.Goals.Add(new Goal());
                     EditorGUILayout.BeginVertical("box", GUILayout.Width(200));
@@ -180,12 +181,12 @@ namespace ODProjects.LevelEditor
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.Space();
                 }
-                _targetCountTemp = _targetCount;
+                _targetCountTemp = _currentLevelData.goalColorCount;
             }
             else
             {
                 if(_currentLevelData.Goals.Count == 0) return;
-                for (int i = 0; i < _targetCount; i++)
+                for (int i = 0; i < _currentLevelData.goalColorCount; i++)
                 {
                     EditorGUILayout.BeginHorizontal("box", GUILayout.Width(200));
                     var goal = _currentLevelData.Goals[i];

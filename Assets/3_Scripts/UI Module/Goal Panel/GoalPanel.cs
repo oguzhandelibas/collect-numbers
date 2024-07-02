@@ -35,7 +35,7 @@ namespace CollectNumbers
 
             Goal goal = _goals.Find(x => x.TargetColor == selectedColor);
             goal.Count--;
-            if(goal.Count < 0) goal.Count = 0;
+            if(goal.Count <= 0) goal.Count = 0;
             _goalBehaviours[_goals.IndexOf(goal)].Initialize(goal.GetColor(), goal.Count);
     
             if (goal.Count <= 0)

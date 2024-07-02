@@ -8,7 +8,7 @@ namespace CollectNumbers
 {
     public class MatchController : AbstractSingleton<MatchController>
     {
-        public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y, bool initial = false)
+        public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y,  int movementRight, bool initial = false)
         {
             if(!GameManager.Instance.gameIsActive) return;
             // AYNI ELEMANLARIN SAYISINI KONTROL EDECEĞİZ
@@ -47,7 +47,7 @@ namespace CollectNumbers
             }
             if (rowElements.Count >= 2)
             {
-                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, true); return; }
+                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, true, movementRight); return; }
                 
                 rowElements.Add(currentElement); // Mevcut elemanı da ekle
                 List<int> matchIndexes = new List<int>();
@@ -108,7 +108,7 @@ namespace CollectNumbers
             }
             if (columnElements.Count >= 2)
             {
-                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, false); return; }
+                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, false, movementRight); return; }
                 
                 columnElements.Add(currentElement); // Mevcut elemanı da ekle
                 int smallest = 99;
@@ -143,7 +143,7 @@ namespace CollectNumbers
             }
         }
         
-        private void RegenerateElement(NumberBehaviour[] gridElements, NumberBehaviour element, Vector2Int gridSize, bool checkRow)
+        private void RegenerateElement(NumberBehaviour[] gridElements, NumberBehaviour element, Vector2Int gridSize, bool checkRow, int movementRight)
         {
             SelectedNumber newNumber;
             ElementGenerator elementGenerator = new ElementGenerator();
@@ -154,7 +154,7 @@ namespace CollectNumbers
             
             element.Initialize(elementGenerator.GetRandomElementContext(newNumber),
                 elementGenerator.GetColor(newNumber),
-                newNumber);
+                newNumber, movementRight);
         }
         
         private bool IsDuplicateInRowOrColumn(NumberBehaviour[] gridElements, NumberBehaviour element, SelectedNumber newNumber, Vector2Int gridSize, bool checkRow)

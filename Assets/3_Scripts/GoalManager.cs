@@ -25,14 +25,15 @@ namespace CollectNumbers
         public async void DecreaseMoveCount()
         {
             _moveCount--;
-            moveCountText.text = _moveCount.ToString();
             if(_moveCount <= 0)
             {
-                await Task.Delay(1000);
+                _moveCount = 0;
+                await Task.Delay(500);
                 LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
                 levelSignals.OnLevelFinished?.Invoke();
                 levelSignals.OnLevelFailed?.Invoke();
             }
+            moveCountText.text = _moveCount.ToString();
         }
         
         public void DecreaseGoalCount(SelectedColor selectedColor, GameObject targetObject)

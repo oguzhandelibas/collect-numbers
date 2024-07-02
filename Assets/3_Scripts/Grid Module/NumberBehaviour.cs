@@ -16,11 +16,13 @@ namespace CollectNumbers
         [SerializeField] private GameObject effectPrefab;
 
         private int _clickCount = 0;
+        private int _movementRight = 0;
         private Vector3 _originalScale;
         private Tween downTween, upTween;
-        public void Initialize(string number, Color color, SelectedNumber selectedNumber)
+        public void Initialize(string number, Color color, SelectedNumber selectedNumber, int movementRight)
         {
-            if(_clickCount > 2) return;
+            _movementRight = movementRight;
+            if(_clickCount > _movementRight) return;
             this.selectedNumber = selectedNumber;
             numberText.text = number;
             numberImage.color = color;
@@ -41,9 +43,9 @@ namespace CollectNumbers
         public void OnPointerDown(PointerEventData eventData)
         {
             _clickCount++;
-            if(!GameManager.Instance.gameIsActive || !isActive || _clickCount > 2)
+            if(!GameManager.Instance.gameIsActive || !isActive || _clickCount > _movementRight)
             {
-                if (_clickCount == 3)
+                if (_clickCount > _movementRight)
                 {
                     numberImage.color = Color.black;
                     numberImage = null;

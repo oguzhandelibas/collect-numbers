@@ -95,7 +95,7 @@ namespace CollectNumbers
                     
                     matchedElement.transform.position += Vector3.up * 5;
 
-                    matchedElement = elementGenerator.GenerateRandomElement(matchedElement);
+                    matchedElement = elementGenerator.GenerateRandomElement(matchedElement, _levelData.movementRight);
                     matchedElement.index = System.Array.IndexOf(_gridElements, matchedElement);
                     RectTransform rectTransform = matchedElements[i].GetComponent<RectTransform>();
 
@@ -114,7 +114,7 @@ namespace CollectNumbers
                     int index = matchedElements[i].index;
                     int row = index / gridSize.y;
                     int col = index % gridSize.y;
-                    MatchController.Instance.CheckMatch(_gridElements, gridSize, row, col);
+                    MatchController.Instance.CheckMatch(_gridElements, gridSize, row, col, _levelData.movementRight);
                 }
                 
                 for (int i = 0; i < fallingElements.Count; i++)
@@ -123,7 +123,7 @@ namespace CollectNumbers
                     int index = fallingElements[i].index;
                     int row = index / gridSize.y;
                     int col = index % gridSize.y;
-                    MatchController.Instance.CheckMatch(_gridElements, gridSize, row, col);
+                    MatchController.Instance.CheckMatch(_gridElements, gridSize, row, col, _levelData.movementRight);
                 }
             });
         }
@@ -177,7 +177,7 @@ namespace CollectNumbers
                     if (element.selectedNumber != SelectedNumber.Null) // Random Element Creation
                     {
                         cell.Initialize(elementGenerator.GetRandomElementContext(element.selectedNumber),
-                            elementGenerator.GetColor(element.selectedNumber), element.selectedNumber);
+                            elementGenerator.GetColor(element.selectedNumber), element.selectedNumber, _levelData.movementRight);
                         _gridElements[y * gridSize.x + x] = cell;
                     }
                 }
@@ -203,9 +203,9 @@ namespace CollectNumbers
                     
                     if (element.selectedNumber == SelectedNumber.Null) // Random Element Creation
                     {
-                        cell = elementGenerator.GenerateRandomElement(cell);
+                        cell = elementGenerator.GenerateRandomElement(cell, _levelData.movementRight);
                         _gridElements[y * gridSize.x + x] = cell;
-                        MatchController.Instance.CheckMatch(_gridElements, gridSize, x, y, true);
+                        MatchController.Instance.CheckMatch(_gridElements, gridSize, x, y, _levelData.movementRight, true);
                     }
                 }
             }
@@ -216,12 +216,12 @@ namespace CollectNumbers
             SO_Manager.Load_SO<LevelSignals>().OnDecreaseMoveCount?.Invoke();
             
             ElementGenerator elementGenerator = new ElementGenerator();
-            elementGenerator.GenerateRandomElement(numberBehaviour);
+            elementGenerator.GenerateRandomElement(numberBehaviour, _levelData.movementRight);
             Vector2Int gridSize = _levelData.gridSize;
             int index = Array.IndexOf(_gridElements, numberBehaviour);
             int row = index / gridSize.y;
             int col = index % gridSize.y;
-            MatchController.Instance.CheckMatch(_gridElements, gridSize, col, row);
+            MatchController.Instance.CheckMatch(_gridElements, gridSize, col, row, _levelData.movementRight);
         }
 
         #region EVENT SUBSCRIPTION

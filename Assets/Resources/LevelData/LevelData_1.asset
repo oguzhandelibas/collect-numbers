@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: LevelData_1
   m_EditorClassIdentifier: 
   moveCount: 10
+  movementRight: 5
+  goalColorCount: 3
   gridSize: {x: 3, y: 3}
   Goals:
-  - TargetColor: 1
+  - TargetColor: 0
     Material: {fileID: 0}
-    Count: 3
-  - TargetColor: 3
+    Count: 0
+  - TargetColor: 0
     Material: {fileID: 0}
-    Count: 3
-  - TargetColor: 2
+    Count: 0
+  - TargetColor: 0
     Material: {fileID: 0}
-    Count: 3
+    Count: 0
   Elements:
   - selectedNumber: 3
     electedColor: 3
