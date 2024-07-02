@@ -1,4 +1,5 @@
 using CollectNumbers.UIModule;
+using MoreMountains.NiceVibrations;
 using UnityEngine;
 
 namespace CollectNumbers
@@ -34,6 +35,7 @@ namespace CollectNumbers
         
         private void LevelSuccessful()
         {
+            MMVibrationManager.Haptic(HapticTypes.Success, false, true, this);
             Debug.Log("Level Successful");
             UIManager.Instance.Show<LevelCompletedUI>();
             _currentLevelIndex++;
@@ -41,11 +43,13 @@ namespace CollectNumbers
         
         private void LevelFailed()
         {
+            MMVibrationManager.Haptic(HapticTypes.Failure, false, true, this);
             UIManager.Instance.Show<LevelFailedUI>();
         }
         
         private void RestartLevel()
         {
+            MMVibrationManager.Haptic(HapticTypes.LightImpact, false, true, this);
             Debug.Log("Restart Level");
         }
 

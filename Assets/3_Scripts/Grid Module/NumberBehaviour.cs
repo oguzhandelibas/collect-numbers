@@ -1,4 +1,5 @@
 using DG.Tweening;
+using MoreMountains.NiceVibrations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -43,6 +44,7 @@ namespace CollectNumbers
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            MMVibrationManager.Haptic(HapticTypes.LightImpact, false, true, this);
             _clickCount++;
             if(!GameManager.Instance.gameIsActive || !isActive || _clickCount > _movementRight)
             {

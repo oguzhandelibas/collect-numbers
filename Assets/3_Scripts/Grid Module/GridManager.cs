@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
+using MoreMountains.NiceVibrations;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -98,6 +99,7 @@ namespace CollectNumbers
                     RectTransform rectTransform = matchedElements[i].GetComponent<RectTransform>();
                     
                     matchedElement.Explode(false);
+                    MMVibrationManager.Haptic(HapticTypes.MediumImpact, false, true, this);
                     matchedElement.transform.GetChild(1).gameObject.SetActive(true);
                     rectTransform.DOAnchorPos(_gridElementPositions[matchedElement.index], Random.Range(0.3f, 0.6f))
                         .SetEase(Ease.InOutQuad);
