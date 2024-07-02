@@ -7,8 +7,8 @@ namespace CollectNumbers
     [Serializable]
     public struct Element
     {
-        [FormerlySerializedAs("SelectedElement")] public SelectedNumber selectedNumber;
-        public SelectedColor SelectedColor;
+        public SelectedNumber selectedNumber;
+        public SelectedColor electedColor;
 
         public bool hasElement;
 

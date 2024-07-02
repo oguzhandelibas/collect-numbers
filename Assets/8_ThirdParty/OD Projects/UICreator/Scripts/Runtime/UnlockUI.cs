@@ -1,6 +1,4 @@
 ﻿using System;
-using CollectNumbers.GameManagementModule;
-using CollectNumbers.LevelModule;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

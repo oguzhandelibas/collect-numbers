@@ -10,20 +10,17 @@ namespace CollectNumbers
 {
     public class GridManager : AbstractSingleton<GridManager>
     {
-        [SerializeField] private TextMeshProUGUI moveCountText;
-        [SerializeField] private LevelData levelData;
         [SerializeField] private NumberBehaviour numberBehaviourPrefab;
         [SerializeField] private Transform gridParent;
         private float _gridOffset;
         public NumberBehaviour[] _gridElements;
         public Vector2[] _gridElementPositions;
-
-        private int moveCount;
-        private void Start()
+        private LevelData _levelData;
+        
+        private void Initialize(LevelData levelData)
         {
+            _levelData = levelData;
             CreateGrid(levelData.gridSize, levelData.Elements);
-            moveCount = levelData.moveCount;
-            moveCountText.text = moveCount.ToString();
         }
 
         public void SetPositions(List<NumberBehaviour> matchedElements, List<NumberBehaviour> fallingElements)
@@ -35,6 +32,30 @@ namespace CollectNumbers
             Sequence completeSequence = DOTween.Sequence();
             foreach (var element in matchedElements)
             {
+                SelectedColor selectedColor = SelectedColor.Null;
+                switch (element.selectedNumber)
+                {
+                    case SelectedNumber.One:
+                        selectedColor = SelectedColor.Red;
+                        break;
+                    case SelectedNumber.Two:
+                        selectedColor = SelectedColor.Green;
+                        break;
+                    case SelectedNumber.Three:
+                        selectedColor = SelectedColor.Blue;
+                        break;
+                    case SelectedNumber.Four:
+                        selectedColor = SelectedColor.Orange;
+                        break;
+                    case SelectedNumber.Five:
+                        selectedColor = SelectedColor.Purple;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                GoalManager.Instance.DecreaseGoalCount(selectedColor);
+                
+                element.isActive = false;
                 Vector3 originalScale = element.transform.localScale;
                 Vector3 targetScale = originalScale * targetScaleFactor;
 
@@ -84,7 +105,7 @@ namespace CollectNumbers
                 await Task.Delay(500);
                 for (int i = 0; i < matchedElements.Count; i++)
                 {
-                    Vector2Int gridSize = levelData.gridSize;
+                    Vector2Int gridSize = _levelData.gridSize;
                     int index = matchedElements[i].index;
                     int row = index / gridSize.y;
                     int col = index % gridSize.y;
@@ -93,7 +114,7 @@ namespace CollectNumbers
                 
                 for (int i = 0; i < fallingElements.Count; i++)
                 {
-                    Vector2Int gridSize = levelData.gridSize;
+                    Vector2Int gridSize = _levelData.gridSize;
                     int index = fallingElements[i].index;
                     int row = index / gridSize.y;
                     int col = index % gridSize.y;
@@ -187,11 +208,11 @@ namespace CollectNumbers
 
         private void ChangeGridElement(NumberBehaviour numberBehaviour)
         {
-            moveCount--;
-            moveCountText.text = moveCount.ToString();
+            SO_Manager.Load_SO<LevelSignals>().OnDecreaseMoveCount?.Invoke();
+            
             ElementGenerator elementGenerator = new ElementGenerator();
             elementGenerator.GenerateRandomElement(numberBehaviour);
-            Vector2Int gridSize = levelData.gridSize;
+            Vector2Int gridSize = _levelData.gridSize;
             int index = Array.IndexOf(_gridElements, numberBehaviour);
             int row = index / gridSize.y;
             int col = index % gridSize.y;
@@ -203,11 +224,15 @@ namespace CollectNumbers
         private void OnEnable()
         {
             SO_Manager.Load_SO<GridSignals>().OnGridElementChanged += ChangeGridElement;
+            LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
+            levelSignals.OnLevelInitialize += Initialize;
         }
 
         private void OnDisable()
         {
             SO_Manager.Load_SO<GridSignals>().OnGridElementChanged -= ChangeGridElement;
+            LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
+            levelSignals.OnLevelInitialize -= Initialize;
         }
 
         #endregion

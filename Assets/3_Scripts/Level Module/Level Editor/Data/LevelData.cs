@@ -15,7 +15,7 @@ namespace CollectNumbers
         public bool HasPath;
 
         #region GET LEVEL DATA
-        public SelectedColor GetSelectedColor(int index) => Elements[index].SelectedColor;
+        public SelectedColor GetSelectedColor(int index) => Elements[index].electedColor;
 
         public SelectedNumber GetSelectedElement(int index)
         {
@@ -37,7 +37,7 @@ namespace CollectNumbers
         {
             if (!HasPath) HasPath = true;
             Elements[index].Color = color;
-            Elements[index].SelectedColor = selectedColor;
+            Elements[index].electedColor = selectedColor;
             Elements[index].selectedNumber = selectedNumber;
             Elements[index].GuiContent = guiContent;
             Elements[index].hasElement = true;
@@ -46,7 +46,7 @@ namespace CollectNumbers
         {
             if (!HasPath) HasPath = true;
             Elements[index].Color = color;
-            Elements[index].SelectedColor = selectedColor;
+            Elements[index].electedColor = selectedColor;
             Elements[index].selectedNumber = selectedNumber;
             Elements[index].GuiContent = guiContent;
             Elements[index].hasElement = false;

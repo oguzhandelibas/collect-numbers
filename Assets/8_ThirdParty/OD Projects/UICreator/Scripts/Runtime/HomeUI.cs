@@ -1,6 +1,4 @@
-﻿using CollectNumbers.GameManagementModule;
-using CollectNumbers.LevelModule;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace CollectNumbers.UIModule

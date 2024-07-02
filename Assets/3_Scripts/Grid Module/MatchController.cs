@@ -16,6 +16,7 @@ namespace CollectNumbers
         
         public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y, bool initial = false)
         {
+            if(!GameManager.Instance.gameIsActive) return;
             // AYNI ELEMANLARIN SAYISINI KONTROL EDECEĞİZ
             List<NumberBehaviour> rowElements = new List<NumberBehaviour>();
             List<NumberBehaviour> columnElements = new List<NumberBehaviour>();
@@ -52,7 +53,7 @@ namespace CollectNumbers
             }
             if (rowElements.Count >= 2)
             {
-                if (initial) { RegenerateElement(gridElements, currentElement, gridSize); return; }
+                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, true); return; }
                 
                 rowElements.Add(currentElement); // Mevcut elemanı da ekle
                 List<int> matchIndexes = new List<int>();
@@ -71,6 +72,7 @@ namespace CollectNumbers
                 
                 for (int i = willFallIndexes.Count-1; i >= 0 ; i--)
                 {
+                    if(gridElements[willFallIndexes[i] + gridSize.y] == null) continue;
                     gridElements[willFallIndexes[i] + gridSize.y] = gridElements[willFallIndexes[i]];
                     willFallArray[i] = gridElements[willFallIndexes[i]];
                 }
@@ -112,7 +114,7 @@ namespace CollectNumbers
             }
             if (columnElements.Count >= 2)
             {
-                if (initial) { RegenerateElement(gridElements, currentElement, gridSize); return; }
+                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, false); return; }
                 
                 columnElements.Add(currentElement); // Mevcut elemanı da ekle
                 int smallest = 99;
@@ -135,6 +137,7 @@ namespace CollectNumbers
                 
                 for (int i = willFallIndexes.Count-1; i >= 0 ; i--)
                 {
+                    if(gridElements[willFallIndexes[i] + gridSize.y * columnElements.Count] == null) continue;
                     gridElements[willFallIndexes[i] + gridSize.y * columnElements.Count] = gridElements[willFallIndexes[i]];
                     willFallArray[i] = gridElements[willFallIndexes[i]];
                 }
@@ -146,25 +149,25 @@ namespace CollectNumbers
             }
         }
         
-        private void RegenerateElement(NumberBehaviour[] gridElements, NumberBehaviour element, Vector2Int gridSize)
+        private void RegenerateElement(NumberBehaviour[] gridElements, NumberBehaviour element, Vector2Int gridSize, bool checkRow)
         {
             SelectedNumber newNumber;
             ElementGenerator elementGenerator = new ElementGenerator();
             do
             {
                 newNumber = elementGenerator.GetRandomEnumValue<SelectedNumber>();
-            } while (IsDuplicateInRowOrColumn(gridElements, element, newNumber, gridSize));
-
+            } while (IsDuplicateInRowOrColumn(gridElements, element, newNumber, gridSize, checkRow));
+            
             element.Initialize(elementGenerator.GetRandomElementContext(newNumber),
                 elementGenerator.GetColor(newNumber),
                 newNumber);
         }
-        private bool IsDuplicateInRowOrColumn(NumberBehaviour[] gridElements, NumberBehaviour element, SelectedNumber newNumber, Vector2Int gridSize)
+        
+        private bool IsDuplicateInRowOrColumn(NumberBehaviour[] gridElements, NumberBehaviour element, SelectedNumber newNumber, Vector2Int gridSize, bool checkRow)
         {
             int index = Array.IndexOf(gridElements, element);
             int x = index % gridSize.x;
             int y = index / gridSize.x;
-
             // Satır kontrolü
             for (int i = 0; i < gridSize.x; i++)
             {
@@ -174,7 +177,7 @@ namespace CollectNumbers
                     return true;
                 }
             }
-
+            
             // Sütun kontrolü
             for (int i = 0; i < gridSize.y; i++)
             {
@@ -184,9 +187,8 @@ namespace CollectNumbers
                     return true;
                 }
             }
-
+            
             return false;
         }
-        
     }
 }
