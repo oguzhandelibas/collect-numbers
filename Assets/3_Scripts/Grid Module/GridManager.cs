@@ -53,7 +53,7 @@ namespace CollectNumbers
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                GoalManager.Instance.DecreaseGoalCount(selectedColor);
+                GoalManager.Instance.DecreaseGoalCount(selectedColor,element.gameObject);
                 
                 element.ResetClickCount();
                 

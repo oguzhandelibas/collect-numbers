@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 namespace CollectNumbers
@@ -28,7 +29,7 @@ namespace CollectNumbers
             }
         }
 
-        public bool ChangeGoal(SelectedColor selectedColor)
+        public bool ChangeGoal(SelectedColor selectedColor, GameObject targetObject)
         {
             if (_goals.All(x => x.TargetColor != selectedColor)) return false;
 
@@ -36,7 +37,7 @@ namespace CollectNumbers
             goal.Count--;
             if(goal.Count < 0) goal.Count = 0;
             _goalBehaviours[_goals.IndexOf(goal)].Initialize(goal.GetColor(), goal.Count);
-            
+    
             if (goal.Count <= 0)
             {
                 Color goalColor = goal.GetColor();
@@ -44,11 +45,25 @@ namespace CollectNumbers
                 _goalBehaviours[_goals.IndexOf(goal)].Initialize(goalColor, goal.Count);
                 goal.Count = 0;
             }
-            
+
             bool isFinished = _goals.All(g => g.Count <= 0);
 
+            // Instantiate ve hareket ettirme işlemi
+            GameObject newObject = Instantiate(targetObject, targetObject.transform.parent);
+            Vector3 targetPosition = _goalBehaviours[_goals.IndexOf(goal)].transform.position;
+            newObject.transform.position = targetObject.transform.position; // Başlangıç pozisyonu
+
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(newObject.transform.DOMove(targetPosition, 0.5f).SetEase(Ease.InOutQuad))
+                .Join(newObject.transform.DOScale(newObject.transform.localScale * 0.4f, 0.5f).SetEase(Ease.InOutQuad))
+                .OnComplete(() =>
+                {
+                    Destroy(newObject);
+                });
+            
             return isFinished;
         }
 
+        
     }
 }

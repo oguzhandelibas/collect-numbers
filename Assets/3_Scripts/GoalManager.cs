@@ -35,9 +35,9 @@ namespace CollectNumbers
             }
         }
         
-        public void DecreaseGoalCount(SelectedColor selectedColor)
+        public void DecreaseGoalCount(SelectedColor selectedColor, GameObject targetObject)
         {
-            bool goalsDone = goalPanel.ChangeGoal(selectedColor);
+            bool goalsDone = goalPanel.ChangeGoal(selectedColor, targetObject);
             if(GameManager.Instance.gameIsActive && goalsDone)
             {
                 LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
