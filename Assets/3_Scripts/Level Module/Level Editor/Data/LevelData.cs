@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,7 +29,6 @@ namespace CollectNumbers
         public void SetArray(int length)
         {
             Elements = new Element[length];
-            //SetRequiredSize(selectedElement, index);
             ClearPath();
         }
         public int ArrayLength() => Elements.Length;
@@ -43,15 +41,6 @@ namespace CollectNumbers
             Elements[index].selectedNumber = selectedNumber;
             Elements[index].GuiContent = guiContent;
             Elements[index].hasElement = true;
-        }
-        public void SetFakeButtonColor(int index, SelectedColor selectedColor, Color color, GUIContent guiContent, SelectedNumber selectedNumber)
-        {
-            if (!HasPath) HasPath = true;
-            Elements[index].Color = color;
-            Elements[index].electedColor = selectedColor;
-            Elements[index].selectedNumber = selectedNumber;
-            Elements[index].GuiContent = guiContent;
-            Elements[index].hasElement = false;
         }
         public GUIContent GetContent(int index) => Elements[index].GuiContent;
         public Color GetColor(int index)

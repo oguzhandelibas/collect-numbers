@@ -18,13 +18,12 @@ namespace CollectNumbers.UIModule
 
         private int gameIndex;
         private int unitIndex;
-        public int GameIndex { get => gameIndex; set => gameIndex = value; }
-        public int UnitIndex { get => unitIndex; set => unitIndex = value; }
-        void Start()
+    
+        protected override void Awake()
         {
+            base.Awake();
             m_Views = m_Root.GetComponentsInChildren<View>(true).ToList();
             Init();
-            //m_ViewLayer.ResizeToSafeArea(m_Canvas);
         }
 
         void Init()

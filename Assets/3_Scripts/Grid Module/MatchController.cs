@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +10,6 @@ namespace CollectNumbers
         public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y,  int movementRight, bool initial = false)
         {
             if(!GameManager.Instance.gameIsActive) return;
-            // AYNI ELEMANLARIN SAYISINI KONTROL EDECEĞİZ
             List<NumberBehaviour> rowElements = new List<NumberBehaviour>();
             List<NumberBehaviour> columnElements = new List<NumberBehaviour>();
             NumberBehaviour currentElement = gridElements[y * gridSize.x + x];
@@ -30,8 +28,6 @@ namespace CollectNumbers
                         previousMatch = true;
                     }
                 }
-
-                // Eğer ilk birimde eşleşme varsa, ikinci birimi kontrol et
                 if (previousMatch)
                 {
                     checkX = x + 2 * direction;
@@ -63,14 +59,12 @@ namespace CollectNumbers
                 NumberBehaviour[] willFallArray = new NumberBehaviour[willFallIndexes.Count];
                 for (int i = 0; i < matchIndexes.Count; i++)
                 { matchArray[i] = gridElements[matchIndexes[i]]; }
-                
                 for (int i = willFallIndexes.Count-1; i >= 0 ; i--)
                 {
                     if(gridElements[willFallIndexes[i] + gridSize.y] == null) continue;
                     gridElements[willFallIndexes[i] + gridSize.y] = gridElements[willFallIndexes[i]];
                     willFallArray[i] = gridElements[willFallIndexes[i]];
                 }
-                
                 for (int i = 0; i < matchIndexes.Count; i++)
                 { gridElements[matchIndexes[i] - y * gridSize.y] = matchArray[i]; }
                 
@@ -91,8 +85,6 @@ namespace CollectNumbers
                         firstMatch = true;
                     }
                 }
-
-                // Eğer ilk birimde eşleşme varsa, ikinci birimi kontrol et
                 if (firstMatch)
                 {
                     checkY = y + 2 * direction;
@@ -128,14 +120,12 @@ namespace CollectNumbers
                 NumberBehaviour[] matchArray = new NumberBehaviour[matchIndexes.Count];
                 for (int i = 0; i < matchIndexes.Count; i++)
                 { matchArray[i] = gridElements[matchIndexes[i]]; }
-                
                 for (int i = willFallIndexes.Count-1; i >= 0 ; i--)
                 {
                     if(gridElements[willFallIndexes[i] + gridSize.y * columnElements.Count] == null) continue;
                     gridElements[willFallIndexes[i] + gridSize.y * columnElements.Count] = gridElements[willFallIndexes[i]];
                     willFallArray[i] = gridElements[willFallIndexes[i]];
                 }
-
                 for (int i = 0; i < matchIndexes.Count; i++)
                 { gridElements[matchIndexes[i] - (int)(smallest / gridSize.y) * gridSize.y] = matchArray[i]; }
                 

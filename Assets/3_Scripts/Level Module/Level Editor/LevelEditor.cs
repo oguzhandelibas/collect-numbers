@@ -15,7 +15,6 @@ namespace ODProjects.LevelEditor
         private LevelData[] _allLevelDatas;
         private LevelData _currentLevelData;
         private ColorData _colorData;
-        //private ElementData _elementData;
 
         #endregion
 
@@ -46,7 +45,7 @@ namespace ODProjects.LevelEditor
 
             window.titleContent = new GUIContent("Level Editor");
             window.titleContent.image = EditorGUIUtility.IconContent("d_Animation.EventMarker").image;
-            window.titleContent.tooltip = "Car Lot Jam Level Editor, by OD";
+            window.titleContent.tooltip = "Collect Numbers Level Editor, by OD";
             window.Focus();
         }
 
@@ -99,7 +98,7 @@ namespace ODProjects.LevelEditor
 
             GUI.color = Color.white;
 
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition); // Scrollview ba�lat
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition); // Scrollview başlat
 
             EditorGUILayout.Space();
             EditorGUILayout.Space();
@@ -109,7 +108,7 @@ namespace ODProjects.LevelEditor
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 
-            EditorGUILayout.EndScrollView(); // Scrollview'� sonland�r
+            EditorGUILayout.EndScrollView(); // Scrollview'i sonlandır
 
             GUI.color = Color.green;
             
@@ -133,7 +132,6 @@ namespace ODProjects.LevelEditor
             if (!_hasInitialize)
             {
                 _colorData = Resources.Load<ColorData>("ColorData");
-                //_elementData = Resources.Load<ElementData>("ElementData");
                 if (!_currentLevelData.HasPath)
                 {
                     _currentLevelData.SetArray(_currentLevelData.gridSize.x * _currentLevelData.gridSize.y);
@@ -158,7 +156,7 @@ namespace ODProjects.LevelEditor
             EditorGUILayout.BeginVertical("box", GUILayout.Width(400));
             _currentLevelData = (LevelData)EditorGUILayout.ObjectField("Level Data", _currentLevelData, typeof(LevelData), false);
             _colorData = (ColorData)EditorGUILayout.ObjectField("Color Data", _colorData, typeof(ColorData), false);
-            //_elementData = (ElementData)EditorGUILayout.ObjectField("Element Data", _elementData, typeof(ElementData), false);
+
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space();
 
@@ -203,7 +201,7 @@ namespace ODProjects.LevelEditor
             
             EditorGUILayout.BeginVertical("box", GUILayout.Width(300));
             _selectedNumber = (SelectedNumber)EditorGUILayout.EnumPopup("Selected Element", _selectedNumber);
-            //_selectedColor = (SelectedColor)EditorGUILayout.EnumPopup("Selected Color", _selectedColor);
+
             switch (_selectedNumber)
             {
                 case SelectedNumber.Null:
@@ -276,8 +274,8 @@ namespace ODProjects.LevelEditor
             }
 
             EditorGUILayout.EndHorizontal();
-            if (newGridSize.y > 9) newGridSize.y = 9;
-            if (newGridSize.x > 9) newGridSize.x = 9;
+            if (newGridSize.y > 7) newGridSize.y = 7;
+            if (newGridSize.x > 7) newGridSize.x = 7;
             if (newGridSize.y < 2) newGridSize.y = 2;
             if (newGridSize.x < 2) newGridSize.x = 2;
 
@@ -293,10 +291,6 @@ namespace ODProjects.LevelEditor
                 _currentLevelData.ClearPath();
                 CheckPathAndInitialization();
             }
-            /*
-            EditorGUILayout.LabelField("Button Size", GUILayout.Width(75));
-            _boxSize =  EditorGUILayout.IntField(_boxSize);*/
-
 
             EditorGUILayout.Space();
 
@@ -354,7 +348,6 @@ namespace ODProjects.LevelEditor
                 else if(_selectedColor != SelectedColor.Null && _selectedNumber != SelectedNumber.Null)  // ADD
                 {
                     ChangeButtonState(content, index);
-                    //content.image = _elementData.Elements[_selectedElement];
                 }
             }
         }
@@ -368,10 +361,6 @@ namespace ODProjects.LevelEditor
             if (indexes.Count > 0)
             {
                 _currentLevelData.SetButtonColor(index, _selectedColor, _colorData.Colors[_selectedColor].color, content, _selectedNumber);
-                /*for (int i = 1; i < indexes.Count; i++)
-                {
-                    _currentLevelData.SetFakeButtonColor(indexes[i], _selectedColor, _colorData.Colors[_selectedColor].color, content, _selectedElement);
-                }*/
                 string temp1 = _selectedNumber.ToString();
                 content.text = temp1;
             }

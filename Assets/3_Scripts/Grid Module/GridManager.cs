@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,8 +22,9 @@ namespace CollectNumbers
             CreateGrid(levelData.gridSize, levelData.Elements);
         }
 
-        public void SetPositions(List<NumberBehaviour> matchedElements, List<NumberBehaviour> fallingElements)
+        public async void SetPositions(List<NumberBehaviour> matchedElements, List<NumberBehaviour> fallingElements)
         {
+            await Task.Delay(200);
             float growDuration = 0.2f; // Büyüme süresi
             float shrinkDuration = 0.2f; // Küçülme süresi
             float targetScaleFactor = 1.2f;
@@ -61,6 +61,7 @@ namespace CollectNumbers
                 Vector3 originalScale = element.transform.GetChild(1).localScale;
                 Vector3 targetScale = originalScale * targetScaleFactor;
                 element.transform.GetChild(1).gameObject.SetActive(false);
+                
                 element.Explode(true);
                 Sequence mySequence = DOTween.Sequence(); // Her eleman için yeni bir Sequence oluşturun
                 mySequence
@@ -68,9 +69,8 @@ namespace CollectNumbers
                     .Append(element.transform.GetChild(1).DOScale(Vector3.zero, shrinkDuration).SetEase(Ease.OutQuad)) // Küçültme
                     .OnComplete(() =>
                     {
-                        
                         element.transform.GetChild(1).localScale = originalScale;
-                    }); // Küçültme tamamlandığında objeyi devre dışı bırak
+                    });
 
                 completeSequence.Join(mySequence);
             }
@@ -78,16 +78,14 @@ namespace CollectNumbers
             completeSequence.OnComplete(async () =>
             {
                 ElementGenerator elementGenerator = new ElementGenerator();
-
+            
                 foreach (var gridElement in fallingElements)
                 {
                     gridElement.index = Array.IndexOf(_gridElements, gridElement);
                     RectTransform rectTransform = gridElement.GetComponent<RectTransform>();
-
-                    // Animasyon için DoTween kullan
                     rectTransform.DOAnchorPos(_gridElementPositions[gridElement.index], 0.3f).SetEase(Ease.InOutQuad);
                 }
-
+                
                 for (int i = 0; i < matchedElements.Count; i++)
                 {
                     NumberBehaviour matchedElement = matchedElements[i];
@@ -98,16 +96,15 @@ namespace CollectNumbers
                     matchedElement = elementGenerator.GenerateRandomElement(matchedElement, _levelData.movementRight);
                     matchedElement.index = System.Array.IndexOf(_gridElements, matchedElement);
                     RectTransform rectTransform = matchedElements[i].GetComponent<RectTransform>();
-
-                    // Animasyon için DoTween kullan
+                    
                     matchedElement.Explode(false);
                     matchedElement.transform.GetChild(1).gameObject.SetActive(true);
                     rectTransform.DOAnchorPos(_gridElementPositions[matchedElement.index], Random.Range(0.3f, 0.6f))
                         .SetEase(Ease.InOutQuad);
                 }
-
                 
                 await Task.Delay(500);
+                
                 for (int i = 0; i < matchedElements.Count; i++)
                 {
                     Vector2Int gridSize = _levelData.gridSize;

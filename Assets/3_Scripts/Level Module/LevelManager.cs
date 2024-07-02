@@ -55,7 +55,6 @@ namespace CollectNumbers
         }
         
         
-        
         #region EVENT SUBSCRIPTION
         
         private void OnEnable()

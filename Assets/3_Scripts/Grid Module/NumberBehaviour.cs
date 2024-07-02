@@ -18,7 +18,8 @@ namespace CollectNumbers
         private int _clickCount = 0;
         private int _movementRight = 0;
         private Vector3 _originalScale;
-        private Tween downTween, upTween;
+        private Tween _downTween, _upTween;
+        
         public void Initialize(string number, Color color, SelectedNumber selectedNumber, int movementRight)
         {
             _movementRight = movementRight;
@@ -52,17 +53,17 @@ namespace CollectNumbers
                     numberText.text = "";
                     selectedNumber = SelectedNumber.Null;
                 }
-                downTween.Kill();
-                upTween.Kill();
+                _downTween.Kill();
+                _upTween.Kill();
                 return;
             }
-            downTween = transform.DOScale(_originalScale * 0.95f, 0.1f).SetEase(Ease.OutQuad);
+            _downTween = transform.DOScale(_originalScale * 0.9f, 0.1f).SetEase(Ease.OutQuad);
             SO_Manager.Load_SO<GridSignals>().OnGridElementChanged?.Invoke(this);
         }
         
         public void OnPointerUp(PointerEventData eventData)
         {
-            upTween = transform.DOScale(_originalScale, 0.1f).SetEase(Ease.OutQuad);
+            _upTween = transform.DOScale(_originalScale, 0.25f).SetEase(Ease.OutQuad);
         }
     }
 }

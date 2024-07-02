@@ -8,6 +8,7 @@ namespace CollectNumbers
         [SerializeField] private LevelData[] levelDatas;
         private LevelSignals _levelSignals;
         public bool gameIsActive = false;
+        
         private void Start()
         {
             _levelSignals = SO_Manager.Load_SO<LevelSignals>();
@@ -30,26 +31,20 @@ namespace CollectNumbers
             _levelSignals.OnLevelInitialize?.Invoke(levelDatas[levelCount]);
         }
         
-        
         #region EVENT SUBSCRIPTION
-        
         private void OnEnable()
         {
             LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
             levelSignals.OnNextLevel += InitializeNextLevel;
             levelSignals.OnRestartLevel += RestartLevel;
         }
-
         
-
         private void OnDisable()
         {
             LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
             levelSignals.OnNextLevel -= InitializeNextLevel;
             levelSignals.OnRestartLevel -= RestartLevel;
-            
         }
-
         #endregion
     }
 }
