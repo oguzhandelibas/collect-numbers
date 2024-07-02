@@ -139,8 +139,8 @@ namespace CollectNumbers
 
             RectTransform parentRect = gridParent.GetComponent<RectTransform>();
             var rect = parentRect.rect;
-            float cellScaleX = rect.width / gridSize.x;
-            float cellScaleY = rect.height / gridSize.y;
+            float cellScaleX = rect.width / gridSize.x / 1.5f;
+            float cellScaleY = rect.height / gridSize.y / 1.5f;
             float cellScale = Mathf.Min(cellScaleX, cellScaleY);
 
             // Calculate offset to center grid
