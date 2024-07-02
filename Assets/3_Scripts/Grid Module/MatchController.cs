@@ -8,12 +8,6 @@ namespace CollectNumbers
 {
     public class MatchController : AbstractSingleton<MatchController>
     {
-        //TOPLU MATCH İÇİN Bİ DÖNGÜ YETERLİ ABEM 0'DAN MAX'A KADAR KONTROL ETTİR İŞTE
-        public void CheckAllMatch(NumberBehaviour[] gridElements, Vector2Int gridSize)
-        {
-            
-        }
-        
         public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y, bool initial = false)
         {
             if(!GameManager.Instance.gameIsActive) return;

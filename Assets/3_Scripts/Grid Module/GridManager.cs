@@ -55,18 +55,21 @@ namespace CollectNumbers
                 }
                 GoalManager.Instance.DecreaseGoalCount(selectedColor);
                 
+                element.ResetClickCount();
+                
                 element.isActive = false;
-                Vector3 originalScale = element.transform.localScale;
+                Vector3 originalScale = element.transform.GetChild(1).localScale;
                 Vector3 targetScale = originalScale * targetScaleFactor;
-
+                element.transform.GetChild(1).gameObject.SetActive(false);
+                element.Explode(true);
                 Sequence mySequence = DOTween.Sequence(); // Her eleman için yeni bir Sequence oluşturun
                 mySequence
-                    .Append(element.transform.DOScale(targetScale, growDuration).SetEase(Ease.InOutQuad)) // Büyütme
-                    .Append(element.transform.DOScale(Vector3.zero, shrinkDuration).SetEase(Ease.OutQuad)) // Küçültme
+                    .Append(element.transform.GetChild(1).DOScale(targetScale, growDuration).SetEase(Ease.InOutQuad)) // Büyütme
+                    .Append(element.transform.GetChild(1).DOScale(Vector3.zero, shrinkDuration).SetEase(Ease.OutQuad)) // Küçültme
                     .OnComplete(() =>
                     {
-                        element.gameObject.SetActive(false);
-                        element.transform.localScale = originalScale;
+                        
+                        element.transform.GetChild(1).localScale = originalScale;
                     }); // Küçültme tamamlandığında objeyi devre dışı bırak
 
                 completeSequence.Join(mySequence);
@@ -88,7 +91,8 @@ namespace CollectNumbers
                 for (int i = 0; i < matchedElements.Count; i++)
                 {
                     NumberBehaviour matchedElement = matchedElements[i];
-                    matchedElement.gameObject.SetActive(false);
+                    matchedElement.transform.GetChild(1).gameObject.SetActive(false);
+                    
                     matchedElement.transform.position += Vector3.up * 5;
 
                     matchedElement = elementGenerator.GenerateRandomElement(matchedElement);
@@ -96,7 +100,8 @@ namespace CollectNumbers
                     RectTransform rectTransform = matchedElements[i].GetComponent<RectTransform>();
 
                     // Animasyon için DoTween kullan
-                    matchedElement.gameObject.SetActive(true);
+                    matchedElement.Explode(false);
+                    matchedElement.transform.GetChild(1).gameObject.SetActive(true);
                     rectTransform.DOAnchorPos(_gridElementPositions[matchedElement.index], Random.Range(0.3f, 0.6f))
                         .SetEase(Ease.InOutQuad);
                 }
