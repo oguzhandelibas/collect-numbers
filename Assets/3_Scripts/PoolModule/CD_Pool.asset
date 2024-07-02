@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011bb2e7b13ddcf4fb9915d5b49b7d9c, type: 3}
+  m_Name: CD_Pool
+  m_EditorClassIdentifier: 
+  PoolDataDictionary:
+    _serializedList:
+    - Key: 0
+      Value:
+        ObjectType: {fileID: 4085396039873970070, guid: 6c3a7a04d916848e7a4c2cf0112c8998, type: 3}
+        initalAmount: 5
+        isDynamic: 0
