@@ -69,7 +69,7 @@ namespace CollectNumbers
         public NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour, int movementRight)
         {
             SelectedNumber selectedNumber = GetRandomEnumValue<SelectedNumber>();
-            while (selectedNumber == numberBehaviour.selectedNumber)
+            while (selectedNumber == numberBehaviour.selectedNumber && selectedNumber != SelectedNumber.Null)
             {
                 selectedNumber = GetRandomEnumValue<SelectedNumber>();
             }

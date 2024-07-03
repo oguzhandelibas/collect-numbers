@@ -5,174 +5,105 @@ using UnityEngine;
 
 namespace CollectNumbers
 {
-    public class MatchController : AbstractSingleton<MatchController>
+    public class MatchController
     {
-        public void CheckMatch(NumberBehaviour[] gridElements, Vector2Int gridSize, int x, int y,  int movementRight, bool initial = false)
+        private List<NumberBehaviour> _matchedNumbers = new List<NumberBehaviour>();
+
+        public void CheckSpecialMatch(NumberBehaviour[,] gridElements, Vector2Int gridSize, int x, int y)
         {
-            if(!GameManager.Instance.gameIsActive) return;
-            List<NumberBehaviour> rowElements = new List<NumberBehaviour>();
-            List<NumberBehaviour> columnElements = new List<NumberBehaviour>();
-            NumberBehaviour currentElement = gridElements[y * gridSize.x + x];
-
-            // Satır elemanlarını kontrol et (x koordinatında sağa ve sola doğru)
-            for (int direction = -1; direction <= 1; direction +=2)
-            {
-                bool previousMatch = false;
-                int checkX = x + direction;
-                if (checkX >= 0 && checkX < gridSize.x)
-                {
-                    NumberBehaviour rowElement = gridElements[y * gridSize.x + checkX];
-                    if (rowElement != null && rowElement.selectedNumber == currentElement.selectedNumber)
-                    {
-                        rowElements.Add(rowElement);
-                        previousMatch = true;
-                    }
-                }
-                if (previousMatch)
-                {
-                    checkX = x + 2 * direction;
-                    if (checkX >= 0 && checkX < gridSize.x)
-                    {
-                        NumberBehaviour rowElement = gridElements[y * gridSize.x + checkX];
-                        if (rowElement != null && rowElement.selectedNumber == currentElement.selectedNumber)
-                        {
-                            rowElements.Add(rowElement);
-                        }
-                    }
-                }
-            }
-            if (rowElements.Count >= 2)
-            {
-                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, true, movementRight); return; }
-                
-                rowElements.Add(currentElement); // Mevcut elemanı da ekle
-                List<int> matchIndexes = new List<int>();
-                List<int> willFallIndexes = new List<int>();
-                foreach (var behaviour in rowElements)
-                {
-                    matchIndexes.Add(behaviour.index);
-                    for (int i = y; i > 0; i--)
-                    { willFallIndexes.Add((behaviour.index) - (i * gridSize.y)); }
-                }
-
-                NumberBehaviour[] matchArray = new NumberBehaviour[matchIndexes.Count];
-                NumberBehaviour[] willFallArray = new NumberBehaviour[willFallIndexes.Count];
-                for (int i = 0; i < matchIndexes.Count; i++)
-                { matchArray[i] = gridElements[matchIndexes[i]]; }
-                for (int i = willFallIndexes.Count-1; i >= 0 ; i--)
-                {
-                    if(gridElements[willFallIndexes[i] + gridSize.y] == null) continue;
-                    gridElements[willFallIndexes[i] + gridSize.y] = gridElements[willFallIndexes[i]];
-                    willFallArray[i] = gridElements[willFallIndexes[i]];
-                }
-                for (int i = 0; i < matchIndexes.Count; i++)
-                { gridElements[matchIndexes[i] - y * gridSize.y] = matchArray[i]; }
-                
-                GridManager.Instance.SetPositions(matchArray.ToList(), willFallArray.ToList());
-            }
-
-            // Sütun elemanlarını kontrol et (y koordinatında yukarı ve aşağı doğru)
-            for (int direction = -1; direction <= 1; direction += 2)
-            {
-                bool firstMatch = false;
-                int checkY = y + direction;
-                if (checkY >= 0 && checkY < gridSize.y)
-                {
-                    NumberBehaviour columnElement = gridElements[checkY * gridSize.x + x];
-                    if (columnElement != null && columnElement.selectedNumber == currentElement.selectedNumber)
-                    {
-                        columnElements.Add(columnElement);
-                        firstMatch = true;
-                    }
-                }
-                if (firstMatch)
-                {
-                    checkY = y + 2 * direction;
-                    if (checkY >= 0 && checkY < gridSize.y)
-                    {
-                        NumberBehaviour columnElement = gridElements[checkY * gridSize.x + x];
-                        if (columnElement != null && columnElement.selectedNumber == currentElement.selectedNumber)
-                        {
-                            columnElements.Add(columnElement);
-                        }
-                    }
-                }
-            }
-            if (columnElements.Count >= 2)
-            {
-                if (initial) { RegenerateElement(gridElements, currentElement, gridSize, false, movementRight); return; }
-                
-                columnElements.Add(currentElement); // Mevcut elemanı da ekle
-                int smallest = 99;
-                List<int> willFallIndexes = new List<int>();
-                List<int> matchIndexes = new List<int>();
-                
-                foreach (var behaviour in columnElements)
-                {
-                    matchIndexes.Add(behaviour.index);
-                    smallest = Mathf.Min(smallest, behaviour.index);
-                }
-                
-                for (int i = (int)(smallest / gridSize.y); i > 0; i--)
-                { willFallIndexes.Add((gridElements[smallest].index) - (i * gridSize.y)); }
-
-                NumberBehaviour[] willFallArray = new NumberBehaviour[willFallIndexes.Count];
-                NumberBehaviour[] matchArray = new NumberBehaviour[matchIndexes.Count];
-                for (int i = 0; i < matchIndexes.Count; i++)
-                { matchArray[i] = gridElements[matchIndexes[i]]; }
-                for (int i = willFallIndexes.Count-1; i >= 0 ; i--)
-                {
-                    if(gridElements[willFallIndexes[i] + gridSize.y * columnElements.Count] == null) continue;
-                    gridElements[willFallIndexes[i] + gridSize.y * columnElements.Count] = gridElements[willFallIndexes[i]];
-                    willFallArray[i] = gridElements[willFallIndexes[i]];
-                }
-                for (int i = 0; i < matchIndexes.Count; i++)
-                { gridElements[matchIndexes[i] - (int)(smallest / gridSize.y) * gridSize.y] = matchArray[i]; }
-                
-                GridManager.Instance.SetPositions(matchArray.ToList(), willFallArray.ToList());
-            }
-        }
-        
-        private void RegenerateElement(NumberBehaviour[] gridElements, NumberBehaviour element, Vector2Int gridSize, bool checkRow, int movementRight)
-        {
-            SelectedNumber newNumber;
             ElementGenerator elementGenerator = new ElementGenerator();
-            do
+            NumberBehaviour currentNum = gridElements[x, y];
+            if (currentNum != null)
             {
-                newNumber = elementGenerator.GetRandomEnumValue<SelectedNumber>();
-            } while (IsDuplicateInRowOrColumn(gridElements, element, newNumber, gridSize, checkRow));
-            
-            element.Initialize(elementGenerator.GetRandomElementContext(newNumber),
-                elementGenerator.GetColor(newNumber),
-                newNumber, movementRight);
+                // LEFT & RIGHT CONTROL
+                if (x > 0 && x < gridSize.x - 1)
+                {
+                    NumberBehaviour leftNum = gridElements[x - 1, y];
+                    NumberBehaviour rightNum = gridElements[x + 1, y];
+                    //if (leftGem == null || rightGem == null) return;
+                    if (leftNum != null && rightNum != null)
+                    {
+                        if (leftNum.selectedNumber == currentNum.selectedNumber &&
+                            rightNum.selectedNumber == currentNum.selectedNumber)
+                        {
+                            Debug.Log("H Match Var");
+                            currentNum = elementGenerator.GenerateRandomElement(currentNum, 0);
+                        }
+                    }
+                }
+
+                // ABOVE & BELOW CONTROL
+                if (y > 0 && y < gridSize.y - 1)
+                {
+                    NumberBehaviour aboveNum = gridElements[x, y + 1];
+                    NumberBehaviour belowNum = gridElements[x, y - 1];
+                    if (aboveNum != null && belowNum != null)
+                    {
+                        if (aboveNum.selectedNumber == currentNum.selectedNumber &&
+                            belowNum.selectedNumber == currentNum.selectedNumber)
+                        {
+                            Debug.Log("V Match Var");
+                            currentNum = elementGenerator.GenerateRandomElement(currentNum, 0);
+                        }
+                    }
+                }
+            }
         }
-        
-        private bool IsDuplicateInRowOrColumn(NumberBehaviour[] gridElements, NumberBehaviour element, SelectedNumber newNumber, Vector2Int gridSize, bool checkRow)
+
+        public void FindAllMatches(NumberBehaviour[,] gridElements, Vector2Int gridSize)
         {
-            int index = Array.IndexOf(gridElements, element);
-            int x = index % gridSize.x;
-            int y = index / gridSize.x;
-            // Satır kontrolü
-            for (int i = 0; i < gridSize.x; i++)
+            if (!GameManager.Instance.gameIsActive) return;
+            ElementGenerator elementGenerator = new ElementGenerator();
+
+            for (int x = 0; x < gridSize.x; x++)
             {
-                if (gridElements[y * gridSize.x + i] != null &&
-                    gridElements[y * gridSize.x + i].selectedNumber == newNumber)
+                for (int y = 0; y < gridSize.y; y++)
                 {
-                    return true;
+                    NumberBehaviour currentNum = gridElements[x, y];
+                    if (currentNum != null)
+                    {
+                        // LEFT & RIGHT CONTROL
+                        if (x > 0 && x < gridSize.x - 1)
+                        {
+                            NumberBehaviour leftNum = gridElements[x - 1, y];
+                            NumberBehaviour rightNum = gridElements[x + 1, y];
+                            //if (leftGem == null || rightGem == null) return;
+                            if (leftNum != null && rightNum != null)
+                            {
+                                if (leftNum.selectedNumber == currentNum.selectedNumber &&
+                                    rightNum.selectedNumber == currentNum.selectedNumber)
+                                {
+                                    if (!_matchedNumbers.Contains(currentNum)) _matchedNumbers.Add(currentNum);
+                                    if (!_matchedNumbers.Contains(leftNum)) _matchedNumbers.Add(leftNum);
+                                    if (!_matchedNumbers.Contains(rightNum)) _matchedNumbers.Add(rightNum);
+                                    Debug.Log("Horizontal Matched Numbers: " + currentNum.selectedNumber + " " +
+                                              leftNum.selectedNumber + " " + rightNum.selectedNumber);
+                                }
+                            }
+                        }
+
+                        // ABOVE & BELOW CONTROL
+                        if (y > 0 && y < gridSize.y - 1)
+                        {
+                            NumberBehaviour aboveNum = gridElements[x, y + 1];
+                            NumberBehaviour belowNum = gridElements[x, y - 1];
+                            if (aboveNum != null && belowNum != null)
+                            {
+                                if (aboveNum.selectedNumber == currentNum.selectedNumber &&
+                                    belowNum.selectedNumber == currentNum.selectedNumber)
+                                {
+                                    if (!_matchedNumbers.Contains(currentNum)) _matchedNumbers.Add(currentNum);
+                                    if (!_matchedNumbers.Contains(aboveNum)) _matchedNumbers.Add(aboveNum);
+                                    if (!_matchedNumbers.Contains(belowNum)) _matchedNumbers.Add(belowNum);
+
+                                    Debug.Log("Vertical Matched Numbers: " + currentNum.selectedNumber + " " +
+                                              aboveNum.selectedNumber + " " + belowNum.selectedNumber);
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            
-            // Sütun kontrolü
-            for (int i = 0; i < gridSize.y; i++)
-            {
-                if (gridElements[i * gridSize.x + x] != null &&
-                    gridElements[i * gridSize.x + x].selectedNumber == newNumber)
-                {
-                    return true;
-                }
-            }
-            
-            return false;
         }
     }
 }

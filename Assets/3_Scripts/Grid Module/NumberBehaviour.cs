@@ -10,6 +10,7 @@ namespace CollectNumbers
     public class NumberBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public int index;
+        public bool isHolded = false;
         public bool isActive = true;
         public SelectedNumber selectedNumber;
         [SerializeField] private TextMeshProUGUI numberText;
