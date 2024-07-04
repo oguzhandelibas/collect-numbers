@@ -6,14 +6,21 @@ using Random = UnityEngine.Random;
 
 namespace CollectNumbers
 {
-    public class ElementGenerator
+    public static class ElementGenerator
     {
-        public T GetRandomEnumValue<T>()
+        private static T GetRandomEnumValue<T>()
         {
             Array enumValues = Enum.GetValues(typeof(T));
             return (T)enumValues.GetValue(Random.Range(1, enumValues.Length));
         }
-        public Color GetColor(SelectedNumber selectedNumber)
+        public static Color GetColor(SelectedNumber selectedNumber)
+        {
+            ColorData colorData = SO_Manager.Load_SO<ColorData>();
+            SelectedColor selectedColor = GetSelectedColor(selectedNumber);
+            return colorData.Colors[selectedColor].color;
+        }
+        
+        public static SelectedColor GetSelectedColor(SelectedNumber selectedNumber)
         {
             ColorData colorData = SO_Manager.Load_SO<ColorData>();
             SelectedColor selectedColor = SelectedColor.Null;
@@ -40,9 +47,10 @@ namespace CollectNumbers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return colorData.Colors[selectedColor].color;
+            return selectedColor;
         }
-        public string GetRandomElementContext(SelectedNumber selectedNumber)
+        
+        public static string GetRandomElementContext(SelectedNumber selectedNumber)
         {
             string element = "1";
             switch (selectedNumber)
@@ -66,7 +74,7 @@ namespace CollectNumbers
             return element;
         }
 
-        public NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour, int movementRight)
+        public static NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour, int movementRight)
         {
             SelectedNumber selectedNumber = GetRandomEnumValue<SelectedNumber>();
             while (selectedNumber == numberBehaviour.selectedNumber && selectedNumber != SelectedNumber.Null)

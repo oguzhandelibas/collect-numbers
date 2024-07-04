@@ -9,7 +9,7 @@ namespace CollectNumbers
 {
     public class NumberBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        public int index;
+        public Vector2Int index;
         public bool isHolded = false;
         public bool isActive = true;
         public SelectedNumber selectedNumber;
@@ -30,7 +30,7 @@ namespace CollectNumbers
             numberText.text = number;
             numberImage.color = color;
             isActive = true;
-            _originalScale = transform.localScale;
+            _originalScale = new Vector3(1,1,1);
         }
 
         public void ResetClickCount()
