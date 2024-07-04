@@ -35,6 +35,7 @@ namespace CollectNumbers
         
         private void LevelSuccessful()
         {
+            AudioManager.Instance.PlayAudioEffect(AudioType.Success);
             MMVibrationManager.Haptic(HapticTypes.Success, false, true, this);
             Debug.Log("Level Successful");
             UIManager.Instance.Show<LevelCompletedUI>();
@@ -43,6 +44,7 @@ namespace CollectNumbers
         
         private void LevelFailed()
         {
+            AudioManager.Instance.PlayAudioEffect(AudioType.Fail);
             MMVibrationManager.Haptic(HapticTypes.Failure, false, true, this);
             UIManager.Instance.Show<LevelFailedUI>();
         }

@@ -40,6 +40,8 @@ namespace CollectNumbers
         
         public void SetPositions(List<NumberBehaviour> matchedElements, List<NumberBehaviour> fallingElements)
         {
+            AudioManager.Instance.PlayAudioEffect(AudioType.Match);
+            
             float growDuration = 0.2f; // Büyüme süresi
             float shrinkDuration = 0.2f; // Küçülme süresi
             float targetScaleFactor = 1.2f; ;
@@ -63,10 +65,11 @@ namespace CollectNumbers
                 
                 sequence1.Join(mySequence);
             }
-
+            
             
             sequence1.OnComplete((() =>
             {
+                AudioManager.Instance.PlayAudioEffect(AudioType.Movement);
                 foreach (var gridElement in fallingElements)
                 {
                     RectTransform rectTransform = gridElement.GetComponent<RectTransform>();
@@ -100,8 +103,8 @@ namespace CollectNumbers
                     int col = i % cols;
                     _gridElements[row, col] = list[i];
                 }
-            
-                MatchController.FindAllMatches(_gridElements, true);
+                
+                MatchController.FindAllMatches(_gridElements, false);
             }));
             
             
@@ -193,6 +196,7 @@ namespace CollectNumbers
         private void ChangeGridElement(NumberBehaviour numberBehaviour)
         {
             if(numberBehaviour.selectedNumber == SelectedNumber.Null) return;
+            AudioManager.Instance.PlayAudioEffect(AudioType.Click);
             SO_Manager.Load_SO<LevelSignals>().OnDecreaseMoveCount?.Invoke();
             ElementGenerator.GetNextElement(numberBehaviour);
             MatchController.FindAllMatches(_gridElements, false);

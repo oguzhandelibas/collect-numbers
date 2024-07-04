@@ -27,6 +27,7 @@ namespace CollectNumbers
             if(_moveCount <= 0)
             {
                 _moveCount = 0;
+                moveCountText.text = _moveCount.ToString();
                 await Task.Delay(500);
                 LevelSignals levelSignals = SO_Manager.Load_SO<LevelSignals>();
                 levelSignals.OnLevelFinished?.Invoke();

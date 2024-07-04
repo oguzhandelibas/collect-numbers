@@ -7,16 +7,18 @@ public enum SO_Type
 {
     ColorData,
     GridSignals,
-    LevelSignals
+    LevelSignals,
+    AudioData
 }
 
 public static class SO_Manager
 {
     private static readonly Dictionary<SO_Type, string> Paths = new Dictionary<SO_Type, string>
     {
-        { SO_Type.ColorData, "ColorData"},
+        { SO_Type.ColorData, "Datas/ColorData"},
         { SO_Type.GridSignals, "Signals/SD_GridSignals"},
-        { SO_Type.LevelSignals, "Signals/SD_LevelSignals"}
+        { SO_Type.LevelSignals, "Signals/SD_LevelSignals"},
+        { SO_Type.AudioData, "Datas/AudioData"}
     };
 
     private static readonly Dictionary<SO_Type, ScriptableObject> _cache = new Dictionary<SO_Type, ScriptableObject>();
@@ -63,6 +65,8 @@ public static class SO_Manager
             return SO_Type.GridSignals;
         if (typeof(T) == typeof(LevelSignals))
             return SO_Type.LevelSignals;
+        if (typeof(T) == typeof(AudioData))
+            return SO_Type.AudioData;
         
         throw new ArgumentException($"Unsupported ScriptableObject type: {typeof(T)}");
     }

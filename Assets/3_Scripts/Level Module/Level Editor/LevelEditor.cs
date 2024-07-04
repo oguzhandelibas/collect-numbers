@@ -131,7 +131,7 @@ namespace ODProjects.LevelEditor
         {
             if (!_hasInitialize)
             {
-                _colorData = Resources.Load<ColorData>("ColorData");
+                _colorData = Resources.Load<ColorData>("Datas/ColorData");
                 if (!_currentLevelData.HasPath)
                 {
                     _currentLevelData.SetArray(_currentLevelData.gridSize.x * _currentLevelData.gridSize.y);

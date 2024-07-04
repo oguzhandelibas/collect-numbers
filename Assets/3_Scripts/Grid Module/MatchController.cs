@@ -26,7 +26,7 @@ namespace CollectNumbers
                 for (int y = 0; y < gridSize.y; y++)
                 {
                     NumberBehaviour currentNum = gridElements[x, y];
-                    if (currentNum != null)
+                    if (currentNum != null && currentNum.selectedNumber != SelectedNumber.Null)
                     {
                         // VERTICAL CONTROL
                         if (y > 0 && y < gridSize.y - 1)
