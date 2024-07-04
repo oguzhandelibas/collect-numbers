@@ -104,7 +104,7 @@ namespace CollectNumbers
                     _gridElements[row, col] = list[i];
                 }
                 
-                MatchController.FindAllMatches(_gridElements, false);
+                MatchController.FindAllMatches(_gridElements, true);
             }));
             
             

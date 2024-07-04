@@ -7,10 +7,12 @@ namespace CollectNumbers
     public class LevelManager : AbstractSingleton<LevelManager>
     {
         private int _currentLevelIndex;
+        private bool _levelWin;
 
         private void LevelInitialize(LevelData levelData)
         {
             Debug.Log("Level Initialized");
+            _levelWin = false;
             UIManager.Instance.Show<GameUI>();
         }
         
@@ -35,6 +37,7 @@ namespace CollectNumbers
         
         private void LevelSuccessful()
         {
+            _levelWin = true;
             AudioManager.Instance.PlayAudioEffect(AudioType.Success);
             MMVibrationManager.Haptic(HapticTypes.Success, false, true, this);
             Debug.Log("Level Successful");
@@ -44,6 +47,7 @@ namespace CollectNumbers
         
         private void LevelFailed()
         {
+            if(_levelWin) return;
             AudioManager.Instance.PlayAudioEffect(AudioType.Fail);
             MMVibrationManager.Haptic(HapticTypes.Failure, false, true, this);
             UIManager.Instance.Show<LevelFailedUI>();
