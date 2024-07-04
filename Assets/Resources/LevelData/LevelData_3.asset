@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 067e468ee1859423ba75e24c922d0ead, type: 3}
   m_Name: LevelData_3
   m_EditorClassIdentifier: 
-  moveCount: 12
-  movementRight: 3
+  moveCount: 15
   goalColorCount: 3
   gridSize: {x: 4, y: 4}
   Goals:
   - TargetColor: 1
     Material: {fileID: 0}
-    Count: 6
+    Count: 12
   - TargetColor: 2
     Material: {fileID: 0}
     Count: 6

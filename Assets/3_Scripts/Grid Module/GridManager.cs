@@ -23,7 +23,19 @@ namespace CollectNumbers
         private void Initialize(LevelData levelData)
         {
             _levelData = levelData;
+            ResetGrid(levelData.gridSize);
             CreateGrid(levelData.gridSize, levelData.Elements);
+        }
+
+        private void ResetGrid(Vector2Int gridSize)
+        {
+            _gridElements = new NumberBehaviour[gridSize.x,gridSize.y];
+            _gridElementPositions = new Vector2[gridSize.x,gridSize.y];
+            // Clear existing grid
+            for (int i = gridParent.childCount - 1; i >= 0; i--)
+            {
+                DestroyImmediate(gridParent.GetChild(i).gameObject);
+            }
         }
         
         public void SetPositions(List<NumberBehaviour> matchedElements, List<NumberBehaviour> fallingElements)
@@ -38,7 +50,6 @@ namespace CollectNumbers
                 SelectedColor selectedColor = ElementGenerator.GetSelectedColor(element.selectedNumber);
 
                 GoalManager.Instance.DecreaseGoalCount(selectedColor, element.gameObject);
-                element.ResetClickCount();
                 element.isActive = false;
 
                 Vector3 originalScale = new Vector3(1,1,1);
@@ -66,7 +77,7 @@ namespace CollectNumbers
                 {
                     NumberBehaviour element = t;
                 
-                    element = ElementGenerator.GenerateRandomElement(element, _levelData.movementRight);
+                    element = ElementGenerator.GenerateRandomElement(element);
                     element.transform.GetChild(1).gameObject.SetActive(false);
                     element.transform.position += Vector3.up * 5;
                     RectTransform rectTransform = t.GetComponent<RectTransform>();
@@ -90,7 +101,7 @@ namespace CollectNumbers
                     _gridElements[row, col] = list[i];
                 }
             
-                MatchController.FindAllMatches(_gridElements, _levelData.movementRight, false);
+                MatchController.FindAllMatches(_gridElements, true);
             }));
             
             
@@ -101,6 +112,7 @@ namespace CollectNumbers
 
         private void CreateGrid(Vector2Int gridSize, Element[] elements)
         {
+            
             Debug.Log($"Grid Size: {gridSize}");
 
             int rowCount = gridSize.x;
@@ -144,20 +156,19 @@ namespace CollectNumbers
                     {
                         numberBehaviour.Initialize(
                             ElementGenerator.GetRandomElementContext(elements2D[x, y].selectedNumber),
-                            ElementGenerator.GetColor(elements2D[x, y].selectedNumber), elements2D[x, y].selectedNumber,
-                            _levelData.movementRight);
+                            ElementGenerator.GetColor(elements2D[x, y].selectedNumber), elements2D[x, y].selectedNumber);
                         numberBehaviour.isHolded = true;
                     }
                     else
                     {
                         numberBehaviour =
-                            ElementGenerator.GenerateRandomElement(numberBehaviour, _levelData.movementRight);
+                            ElementGenerator.GenerateRandomElement(numberBehaviour);
                         //matchController.CheckSpecialMatch(_gridElements, gridSize, x, y);
                     }
                 }
             }
 
-            MatchController.FindAllMatches(_gridElements, _levelData.movementRight, true);
+            MatchController.FindAllMatches(_gridElements, true);
         }
 
         #region Helper Methods
@@ -181,9 +192,10 @@ namespace CollectNumbers
 
         private void ChangeGridElement(NumberBehaviour numberBehaviour)
         {
+            if(numberBehaviour.selectedNumber == SelectedNumber.Null) return;
             SO_Manager.Load_SO<LevelSignals>().OnDecreaseMoveCount?.Invoke();
-            ElementGenerator.GenerateRandomElement(numberBehaviour, _levelData.movementRight);
-            MatchController.FindAllMatches(_gridElements, _levelData.movementRight, false);
+            ElementGenerator.GetNextElement(numberBehaviour);
+            MatchController.FindAllMatches(_gridElements, false);
         }
 
         #region EVENT SUBSCRIPTION

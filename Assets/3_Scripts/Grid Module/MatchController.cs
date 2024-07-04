@@ -9,7 +9,7 @@ namespace CollectNumbers
         private static List<NumberBehaviour> _matchedNumbers = new List<NumberBehaviour>();
         private static List<NumberBehaviour> _fallingNumbers = new List<NumberBehaviour>();
         private static bool _isOnProccess = false;
-        public static bool FindAllMatches(NumberBehaviour[,] gridElements, int movementRight, bool initial)
+        public static bool FindAllMatches(NumberBehaviour[,] gridElements, bool initial)
         {
             if (!GameManager.Instance.gameIsActive || _isOnProccess) return false;
             
@@ -39,9 +39,9 @@ namespace CollectNumbers
                                 {
                                     if (initial)
                                     {
-                                        if (!currentNum.isHolded) currentNum = ElementGenerator.GenerateRandomElement(currentNum, movementRight);
-                                        else if (!aboveNum.isHolded) aboveNum = ElementGenerator.GenerateRandomElement(aboveNum, movementRight);
-                                        else if (!belowNum.isHolded) belowNum = ElementGenerator.GenerateRandomElement(belowNum, movementRight);
+                                        if (!currentNum.isHolded) currentNum = ElementGenerator.GenerateRandomElement(currentNum);
+                                        else if (!aboveNum.isHolded) aboveNum = ElementGenerator.GenerateRandomElement(aboveNum);
+                                        else if (!belowNum.isHolded) belowNum = ElementGenerator.GenerateRandomElement(belowNum);
                                     }
                                     else
                                     {
@@ -68,9 +68,9 @@ namespace CollectNumbers
                                 {
                                     if (initial)
                                     {
-                                        if (!currentNum.isHolded) currentNum = ElementGenerator.GenerateRandomElement(currentNum, movementRight);
-                                        else if (!leftNum.isHolded) leftNum = ElementGenerator.GenerateRandomElement(leftNum, movementRight);
-                                        else if (!rightNum.isHolded) rightNum = ElementGenerator.GenerateRandomElement(rightNum, movementRight);
+                                        if (!currentNum.isHolded) currentNum = ElementGenerator.GenerateRandomElement(currentNum);
+                                        else if (!leftNum.isHolded) leftNum = ElementGenerator.GenerateRandomElement(leftNum);
+                                        else if (!rightNum.isHolded) rightNum = ElementGenerator.GenerateRandomElement(rightNum);
                                     }
                                     else
                                     {
@@ -99,9 +99,7 @@ namespace CollectNumbers
 
             return hasMatch;
         }
-
-        // eşleşen ve düşecek nesnelerin yeni indexlerini ayarlama işi hallolursa tamamız
-// daha önceden kullanılmış eleman olunca onu da index sort'una dail edip sıkıntı yaratıyor
+        
         private static void AddToMatchedNumbers(NumberBehaviour[,] gridElements, NumberBehaviour[] numberBehaviours, bool isVertical)
         {
             int smallestNum = numberBehaviours.OrderBy(nb => nb.index.y).FirstOrDefault()!.index.y;
@@ -109,11 +107,7 @@ namespace CollectNumbers
             {
                 smallestNum = numberBehaviours.OrderBy(nb => nb.index.y).LastOrDefault()!.index.y;
             }
-            Debug.Log($"Vertical: {isVertical} Başladı. Smallest Num {smallestNum}");
-            foreach (var item in numberBehaviours)
-            {
-                Debug.Log("MK: " + item.index);
-            }
+            
             int target = 0;
             List<NumberBehaviour> matchedTemp = new List<NumberBehaviour>();
             foreach (var num in numberBehaviours)
@@ -123,7 +117,6 @@ namespace CollectNumbers
                     target++;
                     matchedTemp.Add(num);
                     _matchedNumbers.Add(num);
-                    Debug.Log($"Num Eklendi: {num.index} Vertical: {isVertical}");
                     gridElements[num.index.x, num.index.y].index  = new Vector2Int(num.index.x, num.index.y - smallestNum);
                 }
             }
@@ -134,13 +127,11 @@ namespace CollectNumbers
                 {
                     if (!_fallingNumbers.Contains(gridElements[num.index.x, i]) && !matchedTemp.Contains(gridElements[num.index.x, i]) && gridElements[num.index.x, i] != null)
                     {
-                        Debug.Log($"Fallin Element: {gridElements[num.index.x, i].index}");
                         _fallingNumbers.Add(gridElements[num.index.x, i]);
                         gridElements[num.index.x, i].index = new Vector2Int(num.index.x, i + indexTarget);
                     }
                 }
             }
-            Debug.Log($"Vertical: {isVertical} Bitti");
         }
     }
 }

@@ -7,7 +7,6 @@ namespace CollectNumbers
     public class LevelData : ScriptableObject
     {
         public int moveCount;
-        public int movementRight;
         public int goalColorCount;
         public Vector2Int gridSize;
         public List<Goal> Goals = new List<Goal>();

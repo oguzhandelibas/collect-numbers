@@ -15,6 +15,7 @@ namespace CollectNumbers
         }
         public static Color GetColor(SelectedNumber selectedNumber)
         {
+            if (selectedNumber == SelectedNumber.Null) return Color.black;
             ColorData colorData = SO_Manager.Load_SO<ColorData>();
             SelectedColor selectedColor = GetSelectedColor(selectedNumber);
             return colorData.Colors[selectedColor].color;
@@ -74,14 +75,24 @@ namespace CollectNumbers
             return element;
         }
 
-        public static NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour, int movementRight)
+        public static NumberBehaviour GetNextElement(NumberBehaviour numberBehaviour)
+        {
+            Array enumValues = Enum.GetValues(typeof(SelectedNumber));
+            int nextElementIndex = (int)numberBehaviour.selectedNumber + 1;
+            if (nextElementIndex >= enumValues.Length) nextElementIndex = 0;
+            SelectedNumber selectedNumber = (SelectedNumber)enumValues.GetValue(nextElementIndex);
+            numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber);
+            return numberBehaviour;
+        }
+
+        public static NumberBehaviour GenerateRandomElement(NumberBehaviour numberBehaviour)
         {
             SelectedNumber selectedNumber = GetRandomEnumValue<SelectedNumber>();
-            while (selectedNumber == numberBehaviour.selectedNumber && selectedNumber != SelectedNumber.Null)
+            while (selectedNumber == numberBehaviour.selectedNumber)
             {
                 selectedNumber = GetRandomEnumValue<SelectedNumber>();
             }
-            numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber, movementRight);
+            numberBehaviour.Initialize(GetRandomElementContext(selectedNumber), GetColor(selectedNumber), selectedNumber);
             return numberBehaviour;
         }
     }

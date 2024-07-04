@@ -155,6 +155,7 @@ namespace ODProjects.LevelEditor
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(400));
             _currentLevelData = (LevelData)EditorGUILayout.ObjectField("Level Data", _currentLevelData, typeof(LevelData), false);
+            _targetCountTemp = _currentLevelData.goalColorCount;
             _colorData = (ColorData)EditorGUILayout.ObjectField("Color Data", _colorData, typeof(ColorData), false);
 
             EditorGUILayout.EndVertical();
@@ -162,7 +163,6 @@ namespace ODProjects.LevelEditor
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(300));
             _currentLevelData.moveCount = EditorGUILayout.IntField("Move Count", _currentLevelData.moveCount);
-            _currentLevelData.movementRight = EditorGUILayout.IntField("Movement Right", _currentLevelData.movementRight);
             
             _currentLevelData.goalColorCount = EditorGUILayout.IntField("Goal Colors Count", _currentLevelData.goalColorCount);
             

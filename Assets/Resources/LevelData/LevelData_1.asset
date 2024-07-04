@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: LevelData_1
   m_EditorClassIdentifier: 
   moveCount: 10
-  movementRight: 5
   goalColorCount: 3
   gridSize: {x: 3, y: 3}
   Goals:
