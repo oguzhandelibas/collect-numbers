@@ -18,16 +18,16 @@ MonoBehaviour:
   Goals:
   - TargetColor: 4
     Material: {fileID: 0}
-    Count: 10
+    Count: 12
   - TargetColor: 5
     Material: {fileID: 0}
-    Count: 9
+    Count: 10
   - TargetColor: 2
     Material: {fileID: 0}
-    Count: 12
+    Count: 9
   - TargetColor: 1
     Material: {fileID: 0}
-    Count: 6
+    Count: 9
   Elements:
   - selectedNumber: 0
     electedColor: 0

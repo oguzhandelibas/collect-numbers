@@ -13,19 +13,112 @@ MonoBehaviour:
   m_Name: LevelData_1
   m_EditorClassIdentifier: 
   moveCount: 10
-  goalColorCount: 3
-  gridSize: {x: 3, y: 3}
+  goalColorCount: 2
+  gridSize: {x: 4, y: 4}
   Goals:
-  - TargetColor: 4
-    Material: {fileID: 0}
-    Count: 3
   - TargetColor: 2
     Material: {fileID: 0}
-    Count: 3
+    Count: 9
   - TargetColor: 3
     Material: {fileID: 0}
-    Count: 3
+    Count: 9
   Elements:
+  - selectedNumber: 2
+    electedColor: 2
+    hasElement: 1
+    GuiContent:
+      m_Text: Two
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
+  - selectedNumber: 1
+    electedColor: 1
+    hasElement: 1
+    GuiContent:
+      m_Text: One
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.9529411, g: 0, b: 0.30196077, a: 1}
+  - selectedNumber: 1
+    electedColor: 1
+    hasElement: 1
+    GuiContent:
+      m_Text: One
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.9529411, g: 0, b: 0.30196077, a: 1}
+  - selectedNumber: 2
+    electedColor: 2
+    hasElement: 1
+    GuiContent:
+      m_Text: Two
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
+  - selectedNumber: 3
+    electedColor: 3
+    hasElement: 1
+    GuiContent:
+      m_Text: Three
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.25098038, g: 0.5058824, b: 0.96078426, a: 1}
+  - selectedNumber: 3
+    electedColor: 3
+    hasElement: 1
+    GuiContent:
+      m_Text: Three
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.25098038, g: 0.5058824, b: 0.96078426, a: 1}
+  - selectedNumber: 2
+    electedColor: 2
+    hasElement: 1
+    GuiContent:
+      m_Text: Two
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
+  - selectedNumber: 3
+    electedColor: 3
+    hasElement: 1
+    GuiContent:
+      m_Text: Three
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.25098038, g: 0.5058824, b: 0.96078426, a: 1}
+  - selectedNumber: 2
+    electedColor: 2
+    hasElement: 1
+    GuiContent:
+      m_Text: Two
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
+  - selectedNumber: 2
+    electedColor: 2
+    hasElement: 1
+    GuiContent:
+      m_Text: Two
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
+  - selectedNumber: 1
+    electedColor: 1
+    hasElement: 1
+    GuiContent:
+      m_Text: One
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.9529411, g: 0, b: 0.30196077, a: 1}
+  - selectedNumber: 2
+    electedColor: 2
+    hasElement: 1
+    GuiContent:
+      m_Text: Two
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
   - selectedNumber: 3
     electedColor: 3
     hasElement: 1
@@ -50,22 +143,6 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Tooltip: 
     Color: {r: 0.9529411, g: 0, b: 0.30196077, a: 1}
-  - selectedNumber: 2
-    electedColor: 2
-    hasElement: 1
-    GuiContent:
-      m_Text: Two
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
-  - selectedNumber: 2
-    electedColor: 2
-    hasElement: 1
-    GuiContent:
-      m_Text: Two
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
   - selectedNumber: 1
     electedColor: 1
     hasElement: 1
@@ -74,28 +151,4 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Tooltip: 
     Color: {r: 0.9529411, g: 0, b: 0.30196077, a: 1}
-  - selectedNumber: 3
-    electedColor: 3
-    hasElement: 1
-    GuiContent:
-      m_Text: Three
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 0.25098038, g: 0.5058824, b: 0.96078426, a: 1}
-  - selectedNumber: 3
-    electedColor: 3
-    hasElement: 1
-    GuiContent:
-      m_Text: Three
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 0.25098038, g: 0.5058824, b: 0.96078426, a: 1}
-  - selectedNumber: 2
-    electedColor: 2
-    hasElement: 1
-    GuiContent:
-      m_Text: Two
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 0.007843138, g: 0.75686276, b: 0.06666665, a: 1}
   HasPath: 1

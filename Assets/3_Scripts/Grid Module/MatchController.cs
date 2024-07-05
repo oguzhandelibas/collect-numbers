@@ -51,7 +51,7 @@ namespace CollectNumbers
                                         verticalCheckNumbers.Add(belowNum);
                                     }
 
-                                    Debug.Log("Vertical Matched Numbers: " + currentNum.selectedNumber + " " + aboveNum.selectedNumber + " " + belowNum.selectedNumber);
+                                    //Debug.Log("Vertical Matched Numbers: " + currentNum.selectedNumber + " " + aboveNum.selectedNumber + " " + belowNum.selectedNumber);
                                 }
                             }
                         }
@@ -61,7 +61,6 @@ namespace CollectNumbers
                         {
                             NumberBehaviour leftNum = gridElements[x - 1, y];
                             NumberBehaviour rightNum = gridElements[x + 1, y];
-                            //if (leftGem == null || rightGem == null) return;
                             if (leftNum != null && rightNum != null)
                             {
                                 if (leftNum.selectedNumber == currentNum.selectedNumber &&
@@ -80,8 +79,7 @@ namespace CollectNumbers
                                         horizontalCheckNumbers.Add(rightNum);
                                     }
 
-                                    Debug.Log("Horizontal Matched Numbers: " + currentNum.selectedNumber + " " +
-                                              leftNum.selectedNumber + " " + rightNum.selectedNumber);
+                                    //Debug.Log("Horizontal Matched Numbers: " + currentNum.selectedNumber + " " + leftNum.selectedNumber + " " + rightNum.selectedNumber);
                                 }
                             }
                         }

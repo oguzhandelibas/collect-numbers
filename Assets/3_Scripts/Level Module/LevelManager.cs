@@ -24,25 +24,24 @@ namespace CollectNumbers
         
         private int GetLevelCount()
         {
-            return _currentLevelIndex;
+            return PlayerPrefs.GetInt("LevelIndex", 0);
         }
 
         private void NextLevel()
         {
             Debug.Log("Next Level");
-            _currentLevelIndex++;
-            
             UIManager.Instance.Show<GameUI>();
         }
         
         private void LevelSuccessful()
         {
             _levelWin = true;
+            _currentLevelIndex++;
+            PlayerPrefs.SetInt("LevelIndex", _currentLevelIndex);
             AudioManager.Instance.PlayAudioEffect(AudioType.Success);
             MMVibrationManager.Haptic(HapticTypes.Success, false, true, this);
             Debug.Log("Level Successful");
             UIManager.Instance.Show<LevelCompletedUI>();
-            _currentLevelIndex++;
         }
         
         private void LevelFailed()
