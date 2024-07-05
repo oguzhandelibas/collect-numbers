@@ -244,11 +244,11 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 242886422}
+  - {fileID: 971402535}
   - {fileID: 7943319143251409195}
+  - {fileID: 1043535987}
   - {fileID: 6915533899324464405}
   - {fileID: 1689214661}
-  - {fileID: 971402535}
-  - {fileID: 1043535987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &201205492
@@ -599,8 +599,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 220.69998, y: 642.70996}
+  m_AnchoredPosition: {x: 30, y: -30}
+  m_SizeDelta: {x: 160.99, y: 450.02}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &293244368
 MonoBehaviour:
@@ -1087,7 +1087,7 @@ GameObject:
   m_Layer: 0
   m_Name: Level Manager
   m_TagString: Untagged
-  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2429,7 +2429,7 @@ RectTransform:
   m_GameObject: {fileID: 3137218574471123331}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2104206446207004531}

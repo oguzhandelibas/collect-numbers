@@ -27,7 +27,7 @@ MonoBehaviour:
     Count: 9
   - TargetColor: 1
     Material: {fileID: 0}
-    Count: 9
+    Count: 6
   Elements:
   - selectedNumber: 0
     electedColor: 0
