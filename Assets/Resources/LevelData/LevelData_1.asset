@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 067e468ee1859423ba75e24c922d0ead, type: 3}
   m_Name: LevelData_1
   m_EditorClassIdentifier: 
-  moveCount: 15
+  moveCount: 18
   goalColorCount: 2
   gridSize: {x: 4, y: 4}
   Goals:
