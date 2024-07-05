@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using DG.Tweening;
 using MoreMountains.NiceVibrations;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace CollectNumbers
 {
@@ -29,23 +25,24 @@ namespace CollectNumbers
 
         private void ResetGrid(Vector2Int gridSize)
         {
-            _gridElements = new NumberBehaviour[gridSize.x,gridSize.y];
-            _gridElementPositions = new Vector2[gridSize.x,gridSize.y];
+            _gridElements = new NumberBehaviour[gridSize.x, gridSize.y];
+            _gridElementPositions = new Vector2[gridSize.x, gridSize.y];
             // Clear existing grid
             for (int i = gridParent.childCount - 1; i >= 0; i--)
             {
                 DestroyImmediate(gridParent.GetChild(i).gameObject);
             }
         }
-        
+
         public void SetPositions(List<NumberBehaviour> matchedElements, List<NumberBehaviour> fallingElements)
         {
             AudioManager.Instance.PlayAudioEffect(AudioType.Match);
-            
+
             float growDuration = 0.2f; // Büyüme süresi
             float shrinkDuration = 0.2f; // Küçülme süresi
-            float targetScaleFactor = 1.2f; ;
-            
+            float targetScaleFactor = 1.2f;
+            ;
+
             Sequence sequence1 = DOTween.Sequence();
             foreach (var element in matchedElements)
             {
@@ -54,7 +51,7 @@ namespace CollectNumbers
                 GoalManager.Instance.DecreaseGoalCount(selectedColor, element.gameObject);
                 element.isActive = false;
 
-                Vector3 originalScale = new Vector3(1,1,1);
+                Vector3 originalScale = new Vector3(1, 1, 1);
                 Vector3 targetScale = originalScale * targetScaleFactor;
 
                 Sequence mySequence = DOTween.Sequence(); // Her eleman için yeni bir Sequence oluşturun
@@ -62,35 +59,44 @@ namespace CollectNumbers
                         .SetEase(Ease.InOutQuad).OnComplete(() => element.Explode(true))) // Büyütme
                     .Append(element.transform.GetChild(1).DOScale(Vector3.zero, shrinkDuration)
                         .SetEase(Ease.OutQuad)); // Küçültme
-                
+
                 sequence1.Join(mySequence);
             }
-            
-            
-            sequence1.OnComplete((() =>
+
+
+            sequence1.OnComplete((async () =>
             {
                 AudioManager.Instance.PlayAudioEffect(AudioType.Movement);
                 foreach (var gridElement in fallingElements)
                 {
                     RectTransform rectTransform = gridElement.GetComponent<RectTransform>();
-                    rectTransform.DOAnchorPos(_gridElementPositions[gridElement.index.x, gridElement.index.y], 0.2f).SetEase(Ease.InOutQuad);
+                    rectTransform.DOAnchorPos(_gridElementPositions[gridElement.index.x, gridElement.index.y], 0.2f)
+                        .SetEase(Ease.InOutQuad);
                 }
-    
                 foreach (var t in matchedElements)
                 {
                     NumberBehaviour element = t;
-                
+
                     element = ElementGenerator.GenerateRandomElement(element);
                     element.transform.GetChild(1).gameObject.SetActive(false);
                     element.transform.position += Vector3.up * 5;
                     RectTransform rectTransform = t.GetComponent<RectTransform>();
                     element.Explode(false);
                     MMVibrationManager.Haptic(HapticTypes.MediumImpact, false, true, this);
-                
-                    element.transform.GetChild(1).localScale = new Vector3(1,1,1);
+
+                    element.transform.GetChild(1).localScale = new Vector3(1, 1, 1);
                     element.transform.GetChild(1).gameObject.SetActive(true);
+
+                    rectTransform.DOAnchorPos(_gridElementPositions[element.index.x, element.index.y], 0.2f)
+                        .SetEase(Ease.InOutQuad);
+                }
+
+                await Task.Delay(250);
                 
-                    rectTransform.DOAnchorPos(_gridElementPositions[element.index.x, element.index.y], 0.2f).SetEase(Ease.InOutQuad);
+                if (MatchController.CheckForDuplicateIndices(_gridElements))
+                {
+                    RandomizeGridElements(_gridElements);
+                    return;
                 }
                 
                 List<NumberBehaviour> list = _gridElements.Cast<NumberBehaviour>().ToList();
@@ -103,19 +109,14 @@ namespace CollectNumbers
                     int col = i % cols;
                     _gridElements[row, col] = list[i];
                 }
-                
-                MatchController.FindAllMatches(_gridElements, true);
+
+                MatchController.FindAllMatches(_gridElements, false);
             }));
-            
-            
-            
         }
         
-        //grid elementlerinin pozisyonunu indexlere göre ayarla
 
         private void CreateGrid(Vector2Int gridSize, Element[] elements)
         {
-            
             Debug.Log($"Grid Size: {gridSize}");
 
             int rowCount = gridSize.x;
@@ -128,8 +129,8 @@ namespace CollectNumbers
 
             RectTransform parentRect = gridParent.GetComponent<RectTransform>();
             var rect = parentRect.rect;
-            float cellScaleX = rect.width / gridSize.x / 1.5f;
-            float cellScaleY = rect.height / gridSize.y / 1.5f;
+            float cellScaleX = rect.width / gridSize.x / 1.1f;
+            float cellScaleY = rect.height / gridSize.y / 1.1f;
             float cellScale = Mathf.Min(cellScaleX, cellScaleY);
 
             #endregion
@@ -159,14 +160,14 @@ namespace CollectNumbers
                     {
                         numberBehaviour.Initialize(
                             ElementGenerator.GetRandomElementContext(elements2D[x, y].selectedNumber),
-                            ElementGenerator.GetColor(elements2D[x, y].selectedNumber), elements2D[x, y].selectedNumber);
+                            ElementGenerator.GetColor(elements2D[x, y].selectedNumber),
+                            elements2D[x, y].selectedNumber);
                         numberBehaviour.isHolded = true;
                     }
                     else
                     {
                         numberBehaviour =
                             ElementGenerator.GenerateRandomElement(numberBehaviour);
-                        //matchController.CheckSpecialMatch(_gridElements, gridSize, x, y);
                     }
                 }
             }
@@ -189,13 +190,51 @@ namespace CollectNumbers
 
             return elements2d;
         }
+        
+        private void RandomizeGridElements(NumberBehaviour[,] gridElements)
+        {
+            int rows = gridElements.GetLength(0);
+            int cols = gridElements.GetLength(1);
+            List<NumberBehaviour> elementsList = Shuffle(gridElements.Cast<NumberBehaviour>().ToList());
+
+            int index = 0;
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    gridElements[row, col] = elementsList[index];
+                    gridElements[row, col].index = new Vector2Int(row, col);
+                    index++;
+                    NumberBehaviour numberBehaviour = gridElements[row, col];
+                    RectTransform rectTransform = numberBehaviour.GetComponent<RectTransform>();
+
+                    rectTransform.anchoredPosition = _gridElementPositions[row, col];
+                }
+            }
+
+            MatchController.FindAllMatches(_gridElements, true);
+        }
+
+        private List<T> Shuffle<T>(List<T> list)
+        {
+            System.Random rng = new System.Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (list[k], list[n]) = (list[n], list[k]);
+            }
+
+            return list;
+        }
 
         #endregion
 
 
         private void ChangeGridElement(NumberBehaviour numberBehaviour)
         {
-            if(numberBehaviour.selectedNumber == SelectedNumber.Null) return;
+            if (numberBehaviour.selectedNumber == SelectedNumber.Null) return;
             AudioManager.Instance.PlayAudioEffect(AudioType.Click);
             SO_Manager.Load_SO<LevelSignals>().OnDecreaseMoveCount?.Invoke();
             ElementGenerator.GetNextElement(numberBehaviour);

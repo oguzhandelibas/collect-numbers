@@ -229,7 +229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0ce5c5c1a4b456e96fb5cb38a6f08ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 0
+  index: {x: 0, y: 0}
+  isHolded: 0
   isActive: 1
   selectedNumber: 0
   numberText: {fileID: 8871147545416548629}

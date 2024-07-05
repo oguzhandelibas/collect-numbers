@@ -14,14 +14,16 @@ public class AudioManager : AbstractSingleton<AudioManager>
     private bool isSoundActive = true;
     private bool isMusicActive = false;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+        
         _audioData = SO_Manager.Load_SO<AudioData>();
         isSoundActive = false;
         isMusicActive = true;
         _SetMusicActiveness();
         _SetSoundActiveness();
-    }
+    } 
     
     public void _SetMusicActiveness()
     {

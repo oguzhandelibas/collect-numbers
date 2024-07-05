@@ -9,6 +9,7 @@ namespace CollectNumbers
         private static List<NumberBehaviour> _matchedNumbers = new List<NumberBehaviour>();
         private static List<NumberBehaviour> _fallingNumbers = new List<NumberBehaviour>();
         private static bool _isOnProccess = false;
+        
         public static bool FindAllMatches(NumberBehaviour[,] gridElements, bool initial)
         {
             if (!GameManager.Instance.gameIsActive || _isOnProccess) return false;
@@ -99,7 +100,7 @@ namespace CollectNumbers
 
             return hasMatch;
         }
-        
+
         private static void AddToMatchedNumbers(NumberBehaviour[,] gridElements, NumberBehaviour[] numberBehaviours, bool isVertical)
         {
             int smallestNum = numberBehaviours.OrderBy(nb => nb.index.y).FirstOrDefault()!.index.y;
@@ -117,7 +118,13 @@ namespace CollectNumbers
                     target++;
                     matchedTemp.Add(num);
                     _matchedNumbers.Add(num);
-                    gridElements[num.index.x, num.index.y].index  = new Vector2Int(num.index.x, num.index.y - smallestNum);
+                    int targetYIndex = num.index.y - smallestNum;
+                    if (targetYIndex < 0)
+                    {
+                        smallestNum--;
+                        targetYIndex = 0;
+                    }
+                    gridElements[num.index.x, num.index.y].index  = new Vector2Int(num.index.x, targetYIndex);
                 }
             }
             int indexTarget = isVertical ? target : 1;
@@ -132,6 +139,34 @@ namespace CollectNumbers
                     }
                 }
             }
+        }
+        
+        public static bool CheckForDuplicateIndices(NumberBehaviour[,] gridElements)
+        {
+            HashSet<Vector2Int> seenIndices = new HashSet<Vector2Int>();
+            List<Vector2Int> duplicateIndices = new List<Vector2Int>();
+
+            int rows = gridElements.GetLength(0);
+            int cols = gridElements.GetLength(1);
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    Vector2Int currentIndex = gridElements[row, col].index;
+                
+                    if (seenIndices.Contains(currentIndex))
+                    {
+                        duplicateIndices.Add(currentIndex);
+                    }
+                    else
+                    {
+                        seenIndices.Add(currentIndex);
+                    }
+                }
+            }
+
+            return duplicateIndices.Count > 0;
         }
     }
 }
